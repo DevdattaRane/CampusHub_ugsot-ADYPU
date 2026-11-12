@@ -1,0 +1,100 @@
+.home-page { gap: 32px; }
+.home-welcome { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.home-welcome > div { max-width: 760px; }
+.today-panel { display: flex; flex-direction: column; gap: 22px; padding: clamp(18px, 4vw, 32px); border: var(--border); border-radius: var(--radius); background: var(--card); }
+.today-panel__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.eyebrow { margin-bottom: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.today-date { padding: 8px 12px; border: var(--border); border-radius: var(--radius); background: var(--highlight); font-weight: 700; white-space: nowrap; }
+.today-list, .week-preview__list { display: flex; flex-direction: column; gap: 10px; }
+.today-event { display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: var(--border); border-radius: var(--radius); color: var(--ink); text-decoration: none; }
+.today-event:hover, .week-event:hover { border-color: var(--primary); color: var(--ink); }
+.today-event__copy { display: flex; min-width: 0; flex-direction: column; gap: 4px; }
+.today-event__copy strong, .week-event__name { overflow-wrap: anywhere; }
+.today-event__copy > span { font-size: 14px; }
+.today-empty { display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
+.today-empty > span { font-size: 14px; }
+.week-preview { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: var(--border); }
+.week-preview__title { font-family: var(--font-space-grotesk), sans-serif; font-size: 20px; font-weight: 700; }
+.week-event { display: flex; min-height: 56px; align-items: center; gap: 12px; padding: 8px 12px; border: var(--border); border-radius: var(--radius); background: var(--bg); color: var(--ink); text-decoration: none; }
+.week-event__date { width: 52px; flex: none; font-size: 13px; font-weight: 700; }
+.week-event__name { flex: 1; font-weight: 700; }
+.empty-note { padding: 14px 0; font-size: 14px; line-height: 1.5; }
+.home-section { display: flex; flex-direction: column; gap: 14px; }
+.home-highlights { flex: 999 1 520px; }
+.home-highlights .highlight:first-of-type { margin-top: 16px; }
+.highlight__copy { min-width: 0; }
+.highlight__copy a { color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.home-calendar { border-top: var(--border); padding-top: 16px; }
+.home-calendar > summary { min-height: 44px; display: flex; align-items: center; font-weight: 700; cursor: pointer; }
+.home-calendar[open] > summary { margin-bottom: 16px; }
+.home-calendar .calendar { box-shadow: none; }
+.filters.card { padding: 18px; }
+.event-card { min-height: 100%; transition: transform 120ms ease, box-shadow 120ms ease; }
+.event-card:hover, .student-card:hover, .post-card:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px, -2px); }
+.event-card__title, .student-card__name, .post__title { overflow-wrap: anywhere; }
+.event-card__foot { align-items: center; }
+.event-card__foot .btn { flex: 0 0 auto; }
+.student-filters { display: flex; flex-direction: column; gap: 16px; }
+.student-filters .search-row { align-items: flex-end; }
+.student-card { min-height: 100%; }
+.student-card__foot .btn { flex: 0 0 auto; }
+.composer { gap: 14px; }
+.composer .textarea { width: 100%; }
+.post { align-items: flex-start; }
+.vote { min-width: 54px; }
+.post__author { min-height: 32px; }
+.profile-page { gap: 18px; }
+.profile-page__heading { display: flex; flex-direction: column; gap: 8px; }
+.profile-page__note { font-size: 15px; }
+.profile-section, .profile-completeness { display: flex; flex-direction: column; gap: 14px; }
+.profile-edit { display: flex; flex-direction: column; gap: 14px; padding-top: 18px; border-top: var(--border); }
+.profile-edit__note { font-size: 13px; }
+.form-error { color: var(--accent); font-size: 14px; font-weight: 700; }
+.form-success { font-size: 14px; font-weight: 700; }
+.route-error { display: flex; max-width: 640px; flex-direction: column; align-items: flex-start; gap: 14px; padding: clamp(20px, 5vw, 36px); border: var(--border); border-radius: var(--radius); background: var(--card); }
+.loading-state { display: flex; flex-direction: column; gap: 16px; }
+.loading-state__bar, .loading-state__panel { border: var(--border); border-radius: var(--radius); background: var(--card); }
+.loading-state__bar { height: 20px; }
+.loading-state__bar--short { width: 140px; background: var(--highlight); }
+.loading-state__bar--title { width: min(100%, 480px); height: 52px; }
+.loading-state__panel { min-height: 220px; }
+.loading-state__panel--small { min-height: 100px; }
+
+@media (min-width: 900px) {
+  .home-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.9fr); }
+  .home-highlights { grid-column: 1; }
+  .home-grid > .teammate { grid-column: 2; }
+}
+
+@media (max-width: 640px) {
+  .home-page { gap: 24px; }
+  .home-welcome { align-items: flex-start; flex-direction: column; }
+  .home-welcome > .btn { width: 100%; }
+  .today-panel { gap: 18px; }
+  .today-panel__head { align-items: flex-start; }
+  .today-panel .section-title, .home-section .section-title { font-size: 23px; }
+  .week-event { flex-wrap: wrap; gap: 6px 10px; }
+  .week-event__name { flex-basis: calc(100% - 64px); }
+  .week-event .tag { margin-left: 62px; }
+  .home-grid { flex-direction: column; }
+  .home-highlights, .home-grid > .teammate { width: 100%; }
+  .event-grid, .student-grid, .post-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .event-card, .student-card, .post-card { padding: 16px; }
+  .student-filters { padding: 16px; }
+  .student-filters .search-row { align-items: stretch; }
+  .student-filters .toggle-btn { width: 100%; }
+  .profile-layout { flex-direction: column; }
+  .profile-card, .profile-main { width: 100%; }
+  .profile-card__body { padding-right: 18px; padding-left: 18px; }
+  .profile-card__intro { align-items: flex-start; text-align: left; }
+  .post { gap: 10px; padding: 14px; }
+  .vote { width: 44px; min-width: 44px; }
+  .composer { padding: 16px; }
+  .composer__foot { align-items: stretch; flex-direction: column; }
+  .composer__foot > .btn { width: 100%; }
+  .today-event { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card, .student-card, .post-card { transition: none; }
+}

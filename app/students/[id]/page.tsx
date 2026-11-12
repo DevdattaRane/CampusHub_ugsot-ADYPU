@@ -7,19 +7,21 @@ export function generateStaticParams() {
   return students.map((s) => ({ id: s.id }));
 }
 
-export function generateMetadata({ params }: { params: { id: string } }) {
-  const s = getStudent(params.id);
-  return { title: s ? `${s.name} · UGSOTADYPU Hub` : 'Student not found' };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const s = getStudent(id);
+  return { title: s ? `${s.name} · CampusHub · UGSOT` : 'Student not found · CampusHub · UGSOT' };
 }
 
-export default function StudentProfilePage({ params }: { params: { id: string } }) {
-  const student = getStudent(params.id);
+export default async function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const student = getStudent(id);
   if (!student) notFound();
 
   return (
     <main className="container page" style={{ gap: 12 }}>
       <Link href="/students" className="back-link">← All students</Link>
-      <ProfileView student={student} isOwn={student.id === CURRENT_USER_ID} />
+      <ProfileView key={student.id} student={student} isOwn={student.id === CURRENT_USER_ID} />
     </main>
   );
 }

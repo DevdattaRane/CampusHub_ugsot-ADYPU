@@ -9,6 +9,9 @@ import { CURRENT_USER_ID, getEvent, getStudent } from '@/lib/data';
 import Avatar from './Avatar';
 import FilterPills from './FilterPills';
 import { ArrowUp, Bubble } from './icons';
+import Button from './ui/Button';
+import Card from './ui/Card';
+import Tag from './ui/Tag';
 
 const TAGS: PostTag[] = ['Need help', 'Ask', 'Find teammate', 'Showcase'];
 const FILTERS = ['All', ...TAGS] as const;
@@ -46,7 +49,7 @@ export default function CommunityFeed({ initialPosts, now: initialNow }: { initi
 
   return (
     <>
-      <section aria-label="New post" className="composer">
+      <Card role="region" aria-label="New post" className="composer">
         <label htmlFor="new-post" className="composer__label">Start a post</label>
         <textarea id="new-post" rows={3} className="textarea" placeholder="What do you need help with, or who are you looking for?" value={draft} onChange={(e) => setDraft(e.target.value)} />
         <div className="composer__foot">
@@ -61,11 +64,11 @@ export default function CommunityFeed({ initialPosts, now: initialNow }: { initi
               );
             })}
           </div>
-          <button type="button" className="btn btn--primary" onClick={submit} disabled={!draft.trim()} style={!draft.trim() ? { opacity: 0.6, cursor: 'not-allowed' } : undefined}>
+          <Button onClick={submit} disabled={!draft.trim()}>
             Post it
-          </button>
+          </Button>
         </div>
-      </section>
+      </Card>
 
       <FilterPills label="Filter by tag" options={FILTERS} value={filter} onChange={setFilter} />
 
@@ -76,13 +79,13 @@ export default function CommunityFeed({ initialPosts, now: initialNow }: { initi
         const c = tagColors[p.tag];
         return (
           <article key={p.id} className="post">
-            <button type="button" className="vote" aria-pressed={isVoted} aria-label={`Upvote, ${p.score + (isVoted ? 1 : 0)} votes`} onClick={() => setVoted((v) => ({ ...v, [p.id]: !v[p.id] }))}>
+            <Button variant="outline" className="vote" aria-pressed={isVoted} aria-label={`Upvote, ${p.score + (isVoted ? 1 : 0)} votes`} onClick={() => setVoted((v) => ({ ...v, [p.id]: !v[p.id] }))}>
               <ArrowUp />
               <span className="vote__count">{p.score + (isVoted ? 1 : 0)}</span>
-            </button>
+            </Button>
             <div className="post__body">
               <div className="post__meta">
-                <span className="chip" style={{ background: c.bg, color: c.fg }}>{p.tag}</span>
+                <Tag className="chip" style={{ background: c.bg, color: c.fg }}>{p.tag}</Tag>
                 {author && (
                   <span className="post__author">
                     <Avatar studentId={author.id} name={author.name} size="sm" />

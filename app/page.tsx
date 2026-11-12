@@ -2,83 +2,150 @@ import Link from 'next/link';
 import HomeCalendar from '@/components/HomeCalendar';
 import TeammateCard from '@/components/TeammateCard';
 import Avatar from '@/components/Avatar';
-import { Plus, Star } from '@/components/icons';
-import { CURRENT_USER_ID, events, getStudent, highlights, posts } from '@/lib/data';
-import { pastel, tagColors } from '@/lib/colors';
-import { formatWeekday, todayISO } from '@/lib/dates';
+import { getStudent, CURRENT_USER_ID, events, highlights, posts } from '@/lib/data';
+import { typeColors, tagColors } from '@/lib/colors';
+import { eventDays, formatShort, formatWeekday, todayISO, toISO } from '@/lib/dates';
+import Card from '@/components/ui/Card';
+import Tag from '@/components/ui/Tag';
 
-// Rendered per request so "today" is always current.
 export const dynamic = 'force-dynamic';
+export const metadata = { title: 'Home · CampusHub · UGSOT' };
 
 export default function HomePage() {
   const today = todayISO();
+  const todayDate = new Date(`${today}T00:00:00`);
+  const daysUntilSunday = (7 - todayDate.getDay()) % 7;
+  const weekEndDate = new Date(todayDate);
+  weekEndDate.setDate(todayDate.getDate() + daysUntilSunday);
+  const weekEnd = toISO(weekEndDate);
+  const todayEvents = events.filter((event) => eventDays(event).some((day) => toISO(day) === today));
+  const todayEventIds = new Set(todayEvents.map((event) => event.id));
+  const weekEvents = events
+    .filter((event) => !todayEventIds.has(event.id) && eventDays(event).some((day) => {
+      const iso = toISO(day);
+      return iso > today && iso <= weekEnd;
+    }))
+    .sort((a, b) => a.start.localeCompare(b.start));
+  const latestPosts = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
   const me = getStudent(CURRENT_USER_ID);
   const firstName = me?.name.split(' ')[0] ?? 'there';
-  const latestPosts = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
 
   return (
-    <main className="container page">
-      <section className="hero">
+    <main className="container page home-page">
+      <header className="home-welcome">
         <div>
-          <span className="tag">{formatWeekday(today)}</span>
-          <h1 className="hero__title">
-            Hey {firstName}, here’s what’s on <span className="hero__highlight">campus</span>
-          </h1>
+          <Tag>{formatWeekday(today)}</Tag>
+          <h1 className="hero__title">Hey {firstName}, ready to <span className="hero__highlight">make</span> today?</h1>
+          <p className="hero__sub">Your people, events and campus conversations, all in one place.</p>
         </div>
-        <Link href="/events" className="btn btn--primary"><Plus />Submit an event</Link>
+        <Link href="/events" className="btn btn--primary">Explore events</Link>
+      </header>
+
+      <section aria-labelledby="today-title" className="today-panel">
+        <div className="today-panel__head">
+          <div>
+            <p className="eyebrow">Start here</p>
+            <h2 id="today-title" className="section-title">Today on campus</h2>
+          </div>
+          <span className="today-date">{formatShort(today)}</span>
+        </div>
+        {todayEvents.length ? (
+          <div className="today-list">
+            {todayEvents.map((event) => (
+              <Link key={event.id} href="/events" className="today-event" style={{ background: typeColors[event.type].bg }}>
+                <span className="today-event__copy">
+                  <strong>{event.title}</strong>
+                  <span>{event.place} · {event.mode}</span>
+                </span>
+                <Tag>{event.type}</Tag>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Card className="today-empty">
+            <strong>No events on your calendar today.</strong>
+            <span>Here’s what’s coming up this week.</span>
+          </Card>
+        )}
+
+        <div className="week-preview">
+          <div className="section-head">
+            <h3 className="week-preview__title">Up next this week</h3>
+            <Link href="/events" className="link-more">All events →</Link>
+          </div>
+          {weekEvents.length ? (
+            <div className="week-preview__list">
+              {weekEvents.map((event) => (
+                <Link key={event.id} href="/events" className="week-event">
+                  <span className="week-event__date">{formatShort(event.start)}</span>
+                  <span className="week-event__name">{event.title}</span>
+                  <Tag style={{ background: typeColors[event.type].bg }}>{event.type}</Tag>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="empty-note">No more events this week. Check back soon.</p>
+          )}
+        </div>
       </section>
 
-      <div className="home-grid">
-        <div className="home-grid__main">
-          <HomeCalendar events={events} today={today} />
-        </div>
-
-        <aside className="home-grid__aside">
-          <section aria-labelledby="highlights-title" className="card">
-            <div className="section-head section-head--icon">
-              <span aria-hidden="true" className="icon-tile"><Star /></span>
-              <h2 id="highlights-title" className="card__title">Daily highlights</h2>
-            </div>
-            {highlights.map((h, i) => {
-              const s = getStudent(h.studentId);
-              if (!s) return null;
-              const c = pastel[i % pastel.length];
-              return (
-                <div key={h.id} className="highlight">
-                  <Avatar studentId={s.id} name={s.name} />
-                  <div style={{ minWidth: 0 }}>
-                    <span className="badge" style={{ background: c.bg, color: c.fg }}>{h.badge}</span>
-                    <p className="highlight__text">
-                      <Link href={`/students/${s.id}`} style={{ color: 'var(--ink)', fontWeight: 700, textDecoration: 'none' }}>{s.name}</Link> {h.text}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </section>
-
-          <TeammateCard />
-        </aside>
-      </div>
-
-      <section aria-labelledby="whatsup-title" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <section aria-labelledby="posts-title" className="home-section">
         <div className="section-head">
-          <h2 id="whatsup-title" className="section-title">What’s up on campus</h2>
+          <div>
+            <p className="eyebrow">From your community</p>
+            <h2 id="posts-title" className="section-title">What’s happening</h2>
+          </div>
           <Link href="/community" className="link-more">Open community →</Link>
         </div>
-        <div className="post-grid">
-          {latestPosts.map((p) => {
-            const author = getStudent(p.authorId);
-            return (
-              <Link key={p.id} href="/community" className="post-card">
-                <span className="chip" style={{ background: tagColors[p.tag].bg, color: tagColors[p.tag].fg }}>{p.tag}</span>
-                <span className="post-card__title">{p.title}</span>
-                <span className="post-card__meta">{author?.name} · {p.replies} replies</span>
-              </Link>
-            );
-          })}
-        </div>
+        {latestPosts.length ? (
+          <div className="post-grid">
+            {latestPosts.map((post) => {
+              const author = getStudent(post.authorId);
+              return (
+                <Link key={post.id} href="/community" className="post-card">
+                  <Tag style={{ background: tagColors[post.tag].bg }}>{post.tag}</Tag>
+                  <span className="post-card__title">{post.title}</span>
+                  <span className="post-card__meta">{author?.name ?? 'Campus student'} · {post.replies} replies</span>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="empty">No community posts yet. Start the first conversation.</p>
+        )}
       </section>
+
+      <section aria-labelledby="highlights-title" className="home-grid">
+        <Card className="home-highlights">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Good things happen here</p>
+              <h2 id="highlights-title" className="card__title">Campus highlights</h2>
+            </div>
+          </div>
+          {highlights.length ? highlights.map((highlight) => {
+            const student = getStudent(highlight.studentId);
+            if (!student) return null;
+            return (
+              <div key={highlight.id} className="highlight">
+                <Avatar studentId={student.id} name={student.name} />
+                <div className="highlight__copy">
+                  <Tag>{highlight.badge}</Tag>
+                  <p className="highlight__text">
+                    <Link href={`/students/${student.id}`}>{student.name}</Link> {highlight.text}
+                  </p>
+                </div>
+              </div>
+            );
+          }) : <p className="empty-note">No highlights yet. Your next win could be here.</p>}
+        </Card>
+        <TeammateCard />
+      </section>
+
+      <details className="home-calendar">
+        <summary>Browse the full event calendar</summary>
+        <HomeCalendar events={events} today={today} />
+      </details>
     </main>
   );
 }

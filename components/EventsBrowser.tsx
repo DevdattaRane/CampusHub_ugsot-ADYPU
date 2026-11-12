@@ -7,6 +7,7 @@ import { formatShort } from '@/lib/dates';
 import Calendar from './Calendar';
 import FilterPills from './FilterPills';
 import EventDateBlock from './EventDateBlock';
+import Tag from './ui/Tag';
 
 const MODES = ['All', 'Online', 'Offline'] as const;
 const WHERE = ['All', 'In campus', 'Out of campus'] as const;
@@ -29,7 +30,7 @@ export default function EventsBrowser({ events, today }: { events: CampusEvent[]
 
   return (
     <>
-      <section aria-label="Filters" className="filters">
+      <section aria-label="Filters" className="card filters">
         <FilterPills label="Mode" options={MODES} value={mode} onChange={setMode} />
         <FilterPills label="Where" options={WHERE} value={where} onChange={setWhere} />
         <div className="segmented filters__end" role="group" aria-label="View">
@@ -41,7 +42,9 @@ export default function EventsBrowser({ events, today }: { events: CampusEvent[]
 
       {view === 'List' ? (
         <>
-          <p className="count">{upcoming.length === 1 ? '1 upcoming event' : `${upcoming.length} upcoming events`}</p>
+          <p className="count" aria-live="polite">
+            <strong>{upcoming.length}</strong> {upcoming.length === 1 ? 'upcoming event' : 'upcoming events'}
+          </p>
           {upcoming.length > 0 ? (
             <div className="event-grid">
               {upcoming.map((e) => (
@@ -54,7 +57,7 @@ export default function EventsBrowser({ events, today }: { events: CampusEvent[]
                     </div>
                   </div>
                   <div className="chip-row">
-                    <span className="chip" style={{ background: typeColors[e.type].bg, color: typeColors[e.type].fg }}>{e.type}</span>
+                    <Tag className="chip" style={{ background: typeColors[e.type].bg, color: typeColors[e.type].fg }}>{e.type}</Tag>
                     <span className="chip chip--neutral">{e.mode}</span>
                     <span className="chip chip--neutral">{e.where}</span>
                   </div>

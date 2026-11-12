@@ -3,7 +3,7 @@ import CommunityFeed from '@/components/CommunityFeed';
 import { posts } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Community · UGSOTADYPU Hub' };
+export const metadata = { title: 'Community · CampusHub · UGSOT' };
 
 export default function CommunityPage() {
   const sorted = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
