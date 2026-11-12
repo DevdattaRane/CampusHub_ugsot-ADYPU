@@ -13,6 +13,8 @@ export const events: CampusEvent[] = [
   { id: 'oss-sprint', title: 'Open-source sprint', type: 'Sprint', mode: 'Online', where: 'Out of campus', place: 'Online, Discord', start: '2026-11-07', deadline: '2026-11-06', registerUrl: '#' },
   { id: 'design-jam', title: 'UI/UX Design Jam', type: 'Design jam', mode: 'Online', where: 'Out of campus', place: 'Online', start: '2026-11-11', deadline: '2026-11-09', registerUrl: '#' },
   { id: 'campus-hackathon', title: 'Campus Hackathon 2026', type: 'Hackathon', mode: 'Offline', where: 'In campus', place: 'Main Auditorium', start: '2026-11-14', end: '2026-11-15', deadline: '2026-11-10', registerUrl: '#' },
+  { id: 'rapid-prototyping-workshop', title: 'Rapid Prototyping Workshop', type: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Innovation Lab', start: '2026-11-14', deadline: '2026-11-13', registerUrl: '#' },
+  { id: 'student-maker-meetup', title: 'Student Maker Meetup', type: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Project Studio', start: '2026-11-14', end: '2026-11-15', deadline: '2026-11-13', registerUrl: '#' },
   { id: 'ml-circle', title: 'ML Paper Reading Circle', type: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Library, Room 2', start: '2026-11-18', deadline: '2026-11-17', registerUrl: '#' },
   { id: 'codefest', title: 'Inter-college Codefest', type: 'Contest', mode: 'Offline', where: 'Out of campus', place: '[Host college, city]', start: '2026-11-21', deadline: '2026-11-15', registerUrl: '#' },
   { id: 'resume-clinic', title: 'Resume & LinkedIn clinic', type: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Placement Cell', start: '2026-11-25', deadline: '2026-11-24', registerUrl: '#' },
