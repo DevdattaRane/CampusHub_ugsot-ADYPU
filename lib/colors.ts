@@ -1,23 +1,22 @@
 import type { EventType, PostTag } from './types';
 
-const highlight = 'var(--highlight)';
 const ink = 'var(--ink)';
 const card = 'var(--card)';
 
-export const typeColors: Record<EventType, { bg: string; fg: string; sticker: string }> = {
-  Hackathon: { bg: highlight, fg: ink, sticker: highlight },
-  Workshop: { bg: highlight, fg: ink, sticker: highlight },
-  Contest: { bg: highlight, fg: ink, sticker: highlight },
-  Meetup: { bg: highlight, fg: ink, sticker: highlight },
-  Sprint: { bg: highlight, fg: ink, sticker: highlight },
-  'Design jam': { bg: highlight, fg: ink, sticker: highlight },
+export const typeColors: Record<EventType, { bg: string; fg: string }> = {
+  Hackathon: { bg: 'var(--event-hackathon)', fg: ink },
+  Workshop: { bg: 'var(--event-workshop)', fg: ink },
+  Contest: { bg: 'var(--event-contest)', fg: ink },
+  Meetup: { bg: 'var(--event-meetup)', fg: ink },
+  Sprint: { bg: 'var(--event-sprint)', fg: ink },
+  'Design jam': { bg: 'var(--event-design-jam)', fg: ink },
 };
 
 export const tagColors: Record<PostTag, { bg: string; fg: string }> = {
-  'Need help': { bg: highlight, fg: ink },
-  Ask: { bg: highlight, fg: ink },
-  'Find teammate': { bg: highlight, fg: ink },
-  Showcase: { bg: highlight, fg: ink },
+  'Need help': { bg: 'var(--highlight)', fg: ink },
+  Ask: { bg: 'var(--highlight)', fg: ink },
+  'Find teammate': { bg: 'var(--highlight)', fg: ink },
+  Showcase: { bg: 'var(--highlight)', fg: ink },
 };
 
 export const pastel = [
@@ -25,5 +24,3 @@ export const pastel = [
 ];
 
 export const weekdayStripe = Array(7).fill(ink);
-
-export const stickerTilt = ['-2deg', '1.5deg', '-1deg', '2deg'];

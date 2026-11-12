@@ -16,6 +16,7 @@ export default function EventsBrowser({ events, today }: { events: CampusEvent[]
   const [mode, setMode] = useState<(typeof MODES)[number]>('All');
   const [where, setWhere] = useState<(typeof WHERE)[number]>('All');
   const [view, setView] = useState<(typeof VIEWS)[number]>('List');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const filtered = useMemo(
     () =>
@@ -69,7 +70,7 @@ export default function EventsBrowser({ events, today }: { events: CampusEvent[]
           )}
         </>
       ) : (
-        <Calendar events={filtered} today={today} tallDays />
+        <Calendar events={filtered} today={today} wide selected={selectedDate} onSelect={setSelectedDate} />
       )}
     </>
   );

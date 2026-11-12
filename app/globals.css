@@ -5,6 +5,12 @@
   --primary: #2B50FF;
   --accent: #FF5A36;
   --highlight: #FFE14D;
+  --event-hackathon: #FF5A36;
+  --event-workshop: #FFE14D;
+  --event-contest: #FF8FC7;
+  --event-meetup: #5EE6A8;
+  --event-sprint: #7CC4FF;
+  --event-design-jam: #B9A3FF;
   --border: 2px solid var(--ink);
   --radius: 4px;
 }

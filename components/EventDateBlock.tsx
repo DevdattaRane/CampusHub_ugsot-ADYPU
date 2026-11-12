@@ -8,7 +8,7 @@ export default function EventDateBlock({ event, variant = 'agenda' }: { event: C
   return (
     <div
       className={`date-block${variant === 'card' ? ' date-block--outlined' : ''}`}
-      style={variant === 'card' ? { background: c.bg, color: c.fg } : { background: c.sticker }}
+      style={{ background: c.bg, color: c.fg }}
     >
       <div className="date-block__mon">{mon}</div>
       <div className="date-block__day">{dayRange(event)}</div>
