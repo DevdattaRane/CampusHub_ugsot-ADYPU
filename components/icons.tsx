@@ -18,13 +18,13 @@ export function Plus({ size = 18 }: IconProps) {
   );
 }
 
-export function Sparkle({ size = 28, color = 'var(--sparkle)' }: IconProps) {
+export function Sparkle({ size = 28, color = 'var(--accent)' }: IconProps) {
   return (
     <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24"><path d="M12 0c.7 6.3 5.7 11.3 12 12-6.3.7-11.3 5.7-12 12-.7-6.3-5.7-11.3-12-12C6.3 11.3 11.3 6.3 12 0z" fill={color} /></svg>
   );
 }
 
-export function Star({ size = 18, color = '#A3164E' }: IconProps) {
+export function Star({ size = 18, color = 'var(--accent)' }: IconProps) {
   return (
     <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z" /></svg>
   );

@@ -56,7 +56,7 @@ export default function StudentsBrowser({ students }: { students: Student[] }) {
               </div>
               <div className="student-card__foot">
                 {s.lookingForTeam ? (
-                  <span className="chip" style={{ background: '#DDF5EA', color: '#11694A' }}>Looking for a team</span>
+                  <span className="chip">Looking for a team</span>
                 ) : (
                   <span className="muted-note">Not looking right now</span>
                 )}

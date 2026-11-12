@@ -12,7 +12,6 @@ export default function EventsPage() {
     <main className="container page">
       <PageHero
         tag="Hack · Learn · Win"
-        tagColor={{ bg: '#FFE1EC', fg: '#A3164E' }}
         before="All the "
         highlight="events"
         sub="Hackathons, workshops and contests, on campus and beyond."

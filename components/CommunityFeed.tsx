@@ -13,8 +13,9 @@ import { ArrowUp, Bubble } from './icons';
 const TAGS: PostTag[] = ['Need help', 'Ask', 'Find teammate', 'Showcase'];
 const FILTERS = ['All', ...TAGS] as const;
 
-export default function CommunityFeed({ initialPosts, now }: { initialPosts: Post[]; now: number }) {
+export default function CommunityFeed({ initialPosts, now: initialNow }: { initialPosts: Post[]; now: number }) {
   const [posts, setPosts] = useState(initialPosts);
+  const [now, setNow] = useState(initialNow);
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('All');
   const [draft, setDraft] = useState('');
   const [draftTag, setDraftTag] = useState<PostTag>('Ask');
@@ -25,18 +26,20 @@ export default function CommunityFeed({ initialPosts, now }: { initialPosts: Pos
   const submit = () => {
     const text = draft.trim();
     if (!text) return;
+    const createdAt = new Date().toISOString();
     const long = text.length > 80;
     const post: Post = {
       id: `local-${Date.now()}`,
       tag: draftTag,
       authorId: CURRENT_USER_ID,
-      createdAt: new Date().toISOString(),
+      createdAt,
       title: long ? `${text.slice(0, 80)}…` : text,
       body: long ? text : '',
       score: 0,
       replies: 0,
     };
     setPosts((p) => [post, ...p]);
+    setNow(Date.parse(createdAt));
     setDraft('');
     setFilter('All');
   };
@@ -84,7 +87,7 @@ export default function CommunityFeed({ initialPosts, now }: { initialPosts: Pos
                   <span className="post__author">
                     <Avatar studentId={author.id} name={author.name} size="sm" />
                     <Link href={author.id === CURRENT_USER_ID ? '/profile' : `/students/${author.id}`}>{author.name}</Link>
-                    · {timeAgo(p.createdAt, p.id.startsWith('local-') ? Date.now() : now)}
+                    · {timeAgo(p.createdAt, now)}
                   </span>
                 )}
               </div>

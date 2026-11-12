@@ -7,17 +7,19 @@ export const metadata = { title: 'Community · UGSOTADYPU Hub' };
 
 export default function CommunityPage() {
   const sorted = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  // This route is dynamic so relative post times should use the current request time.
+  // eslint-disable-next-line react-hooks/purity
+  const now = Date.now();
   return (
     <main className="container page page--narrow">
       <PageHero
         tag="Ask · Help · Build"
-        tagColor={{ bg: '#E3E9FF', fg: '#2A3FB0' }}
         before="What’s "
         highlight="up"
         after="?"
         sub="Ask questions, get unstuck, and find people to build with."
       />
-      <CommunityFeed initialPosts={sorted} now={Date.now()} />
+      <CommunityFeed initialPosts={sorted} now={now} />
     </main>
   );
 }

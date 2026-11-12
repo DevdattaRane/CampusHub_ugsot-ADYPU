@@ -9,7 +9,6 @@ export default function StudentsPage() {
     <main className="container page">
       <PageHero
         tag="Builders on campus"
-        tagColor={{ bg: '#DDF5EA', fg: '#11694A' }}
         before="Find your "
         highlight="squad"
         sub="Search classmates by skill, and see who’s looking for a team."

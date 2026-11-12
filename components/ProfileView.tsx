@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Student } from '@/lib/types';
-import { pastel, typeColors } from '@/lib/colors';
+import { typeColors } from '@/lib/colors';
 import { dayRange, MONTHS_SHORT, parseDate } from '@/lib/dates';
 import { getEvent } from '@/lib/data';
 import Avatar from './Avatar';
@@ -21,9 +21,9 @@ export default function ProfileView({ student, isOwn }: { student: Student; isOw
     <div className="profile-layout">
       <section aria-label="Profile card" className="profile-card">
         <div aria-hidden="true" className="profile-card__banner">
-          <span style={{ borderRadius: '50%', background: '#FFD84D' }} />
-          <span style={{ borderRadius: 6, background: '#FF8FB1' }} />
-          <span style={{ borderRadius: '50%', background: '#7ED6B2' }} />
+          <span />
+          <span />
+          <span />
         </div>
         <div className="profile-card__body">
           <div className="profile-card__intro">
@@ -33,20 +33,19 @@ export default function ProfileView({ student, isOwn }: { student: Student; isOw
               <p className="profile-card__meta">{student.branch} · {student.year} · @{student.handle}</p>
             </div>
             {student.lookingForTeam && (
-              <span className="chip" style={{ background: '#DDF5EA', color: '#11694A', fontSize: 13, padding: '6px 12px' }}>Looking for a team</span>
+              <span className="chip">Looking for a team</span>
             )}
             <p className="profile-card__bio">{student.bio}</p>
           </div>
 
           {links.length > 0 && (
             <div className="link-list">
-              {links.map((l, i) => {
-                const c = pastel[(i * 2 + 3) % pastel.length];
+              {links.map((l) => {
                 const value = student.links[l.key] as string;
                 return (
                   <a key={l.key} href={value.startsWith('http') ? value : `https://${value}`} className="link-row" target="_blank" rel="noreferrer">
-                    <span aria-hidden="true" className="icon-tile" style={{ width: 30, height: 30, borderRadius: 9, background: c.bg }}>
-                      <LinkIcon color={c.fg} />
+                    <span aria-hidden="true" className="icon-tile">
+                      <LinkIcon />
                     </span>
                     <span className="link-row__label">{l.label}</span>
                     <span className="link-row__value">{value}</span>
@@ -56,7 +55,7 @@ export default function ProfileView({ student, isOwn }: { student: Student; isOw
             </div>
           )}
 
-          {isOwn && <button type="button" className="btn btn--yellow">Edit profile</button>}
+          {isOwn && <button type="button" className="btn btn--primary">Edit profile</button>}
         </div>
       </section>
 
@@ -77,8 +76,8 @@ export default function ProfileView({ student, isOwn }: { student: Student; isOw
         <section aria-labelledby="skills-title" className="card">
           <h2 id="skills-title" className="card__title" style={{ marginBottom: 14 }}>Skills</h2>
           <div className="chip-row" style={{ gap: 8 }}>
-            {student.skills.map((k, i) => (
-              <span key={k} className="skill-chip" style={{ background: pastel[(i + 3) % pastel.length].bg, color: pastel[(i + 3) % pastel.length].fg }}>{k}</span>
+            {student.skills.map((k) => (
+              <span key={k} className="skill-chip">{k}</span>
             ))}
           </div>
         </section>

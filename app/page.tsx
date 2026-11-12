@@ -20,7 +20,7 @@ export default function HomePage() {
     <main className="container page">
       <section className="hero">
         <div>
-          <span className="tag" style={{ background: '#DDF5EA', color: '#11694A' }}>{formatWeekday(today)}</span>
+          <span className="tag">{formatWeekday(today)}</span>
           <h1 className="hero__title">
             Hey {firstName}, here’s what’s on <span className="hero__highlight">campus</span>
           </h1>
@@ -36,7 +36,7 @@ export default function HomePage() {
         <aside className="home-grid__aside">
           <section aria-labelledby="highlights-title" className="card">
             <div className="section-head section-head--icon">
-              <span aria-hidden="true" className="icon-tile" style={{ background: '#FFE1EC' }}><Star /></span>
+              <span aria-hidden="true" className="icon-tile"><Star /></span>
               <h2 id="highlights-title" className="card__title">Daily highlights</h2>
             </div>
             {highlights.map((h, i) => {
