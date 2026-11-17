@@ -47,6 +47,8 @@ export type Database = {
           is_suspended: boolean;
           warning_count: number;
           suspension_reason: string | null;
+          dockers_count: number;
+          docking_count: number;
           created_at: string;
           updated_at: string;
         };
@@ -67,6 +69,8 @@ export type Database = {
           is_suspended?: boolean;
           warning_count?: number;
           suspension_reason?: string | null;
+          dockers_count?: number;
+          docking_count?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -570,6 +574,40 @@ export type Database = {
         Update: Partial<Database['public']['Tables']['moderation_logs']['Insert']>;
         Relationships: [];
       };
+      user_forks: {
+        Row: {
+          id: string;
+          forker_id: string;
+          forked_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          forker_id: string;
+          forked_id: string;
+          created_at?: string;
+        };
+        Update: Partial<Database['public']['Tables']['user_forks']['Insert']>;
+        Relationships: [];
+      };
+      rate_limits: {
+        Row: {
+          id: string;
+          user_id: string;
+          action: string;
+          target_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          action: string;
+          target_id?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database['public']['Tables']['rate_limits']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -655,6 +693,24 @@ export type Database = {
           next_rank_score: number;
           badges: string[];
         }[];
+      };
+      fork_user: {
+        Args: { target_user_id: string };
+        Returns: {
+          success: boolean;
+          is_forking: boolean;
+          dockers_count: number;
+          docking_count: number;
+        };
+      };
+      unfork_user: {
+        Args: { target_user_id: string };
+        Returns: {
+          success: boolean;
+          is_forking: boolean;
+          dockers_count: number;
+          docking_count: number;
+        };
       };
     };
     Enums: Record<string, never>;

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import type { Project, Student } from '@/lib/types';
 import type { MyEventRegistration, UserCertificate } from '@/lib/db/events';
 import type { DashboardStats } from '@/lib/db/dashboard';
@@ -15,6 +15,8 @@ import Card from './ui/Card';
 import Input from './ui/Input';
 import Tag from './ui/Tag';
 import DashboardTab from './DashboardTab';
+import ForkButton from './ForkButton';
+import DockersModal from './DockersModal';
 
 const LINK_LABELS: { key: keyof Student['links']; label: string }[] = [
   { key: 'linkedin', label: 'LinkedIn' },
@@ -77,6 +79,24 @@ export default function ProfileView({
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Fork / Docking state
+  const [dockersCount, setDockersCount] = useState(0);
+  const [dockingCount, setDockingCount] = useState(0);
+  const [isForking, setIsForking] = useState(false);
+  const [modalType, setModalType] = useState<'dockers' | 'docking' | null>(null);
+
+  useEffect(() => {
+    if (!profile.id) return;
+    fetch(`/api/students/${profile.id}/fork`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.dockersCount === 'number') setDockersCount(data.dockersCount);
+        if (typeof data.dockingCount === 'number') setDockingCount(data.dockingCount);
+        if (typeof data.isForking === 'boolean') setIsForking(data.isForking);
+      })
+      .catch((err) => console.error('Failed to load fork stats:', err));
+  }, [profile.id]);
 
   const completeness = computeCompleteness({
     name: profile.name,
@@ -173,8 +193,69 @@ export default function ProfileView({
             <h1 className="profile-card__name">{profile.name}</h1>
             <p className="profile-card__meta">{profile.branch} · {profile.year} · @{profile.handle}</p>
             {profile.lookingForTeam && <Tag>Looking for a team</Tag>}
+
+            {/* Dockers / Docking social graph counters */}
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 4 }}>
+              <button
+                type="button"
+                onClick={() => setModalType('dockers')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: 'var(--ink)',
+                }}
+                aria-label={`View ${dockersCount} Dockers`}
+              >
+                <strong>{dockersCount}</strong> <span style={{ textDecoration: 'underline' }}>Dockers</span>
+              </button>
+              <span style={{ opacity: 0.5 }}>·</span>
+              <button
+                type="button"
+                onClick={() => setModalType('docking')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: 'var(--ink)',
+                }}
+                aria-label={`View ${dockingCount} Docking students`}
+              >
+                <strong>{dockingCount}</strong> <span style={{ textDecoration: 'underline' }}>Docking</span>
+              </button>
+            </div>
+
+            {!isOwn && (
+              <div style={{ marginTop: 10 }}>
+                <ForkButton
+                  targetUserId={profile.id}
+                  targetName={profile.name}
+                  initialIsForking={isForking}
+                  initialDockersCount={dockersCount}
+                  onCountChange={(newCount, forking) => {
+                    setDockersCount(newCount);
+                    setIsForking(forking);
+                  }}
+                />
+              </div>
+            )}
+
             <p className="profile-card__bio">{profile.bio}</p>
           </div>
+
+          <DockersModal
+            userId={profile.id}
+            userName={profile.name}
+            type={modalType || 'dockers'}
+            isOpen={Boolean(modalType)}
+            onClose={() => setModalType(null)}
+          />
 
           {links.length > 0 && (
             <div className="link-list">

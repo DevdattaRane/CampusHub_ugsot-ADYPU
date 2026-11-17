@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import type { Student } from '@/lib/types';
 import Avatar from './Avatar';
 import FilterPills from './FilterPills';
+import ForkButton from './ForkButton';
 import Button from './ui/Button';
 import Input from './ui/Input';
 import Tag from './ui/Tag';
@@ -60,7 +61,12 @@ export default function StudentsBrowser({ students }: { students: Student[] }) {
                 ) : (
                   <span className="muted-note">Not looking right now</span>
                 )}
-                <Link href={`/students/${s.id}`} className="btn btn--dark">View profile</Link>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginLeft: 'auto' }}>
+                  <ForkButton targetUserId={s.id} targetName={s.name} size="sm" />
+                  <Link href={`/students/${s.id}`} className="btn btn--dark" style={{ minHeight: 34, fontSize: 13, padding: '0 12px' }}>
+                    View profile
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

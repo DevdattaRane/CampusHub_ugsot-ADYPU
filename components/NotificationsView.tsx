@@ -23,6 +23,7 @@ const TYPE_ICONS: Record<NotificationType, string> = {
   collaboration_request: '👥',
   report_outcome: '🛡️',
   announcement: '📢',
+  fork: '🍴',
   system: '⚡',
 };
 

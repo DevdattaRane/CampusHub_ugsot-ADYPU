@@ -316,6 +316,7 @@ export type NotificationType =
   | 'collaboration_request'
   | 'report_outcome'
   | 'announcement'
+  | 'fork'
   | 'system';
 
 export interface AppNotification {
