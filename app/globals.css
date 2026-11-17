@@ -1362,21 +1362,29 @@ h3,
 
 .cursor-dot {
   position: fixed;
-  z-index: 100;
+  z-index: 200;
   top: 0;
   left: 0;
   display: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
+  width: 0;
+  height: 0;
   mix-blend-mode: difference;
   pointer-events: none;
-  transition: scale 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.cursor-dot--active {
-  scale: 4;
+.cursor-dot::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin: -6px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cursor-dot--active::before {
+  transform: scale(5);
 }
 
 .magnetic {
