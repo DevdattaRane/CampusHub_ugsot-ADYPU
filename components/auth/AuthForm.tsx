@@ -59,6 +59,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   });
   const [errors, setErrors] = useState<AuthErrors>({});
   const [formError, setFormError] = useState('');
+  const [formMessage, setFormMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   function update(field: keyof Fields, value: string) {
@@ -69,6 +70,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       return next;
     });
     setFormError('');
+    setFormMessage('');
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -78,6 +80,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       : validateSignIn({ email: values.email, password: values.password });
     setErrors(validation);
     setFormError('');
+    setFormMessage('');
     if (Object.keys(validation).length) return;
 
     setSubmitting(true);
@@ -98,6 +101,11 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         }
         return;
       }
+      if (registering && typeof payload === 'object' && payload !== null
+        && 'confirmationRequired' in payload && payload.confirmationRequired === true) {
+        setFormMessage('Check your email to confirm your account, then sign in.');
+        return;
+      }
       router.replace('/');
       router.refresh();
     } catch {
@@ -111,17 +119,17 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     <div className="auth-panel">
       <div className="auth-heading">
         <h1 className="auth-heading__title">{registering ? 'Join CampusHub' : 'Welcome back'}</h1>
-        <p>{registering ? 'Create your student account to get started.' : 'Sign in with your college account to continue.'}</p>
+        <p>{registering ? 'Create your student account to get started.' : 'Sign in with your email address to continue.'}</p>
       </div>
       <div className="auth-tabs" role="tablist" aria-label="Account access">
         <button id="auth-tab-login" className={registering ? 'auth-tab' : 'auth-tab auth-tab--active'}
           type="button" role="tab" aria-selected={!registering} aria-controls="auth-form"
-          onClick={() => { setActiveMode('sign-in'); setErrors({}); setFormError(''); }}>
+          onClick={() => { setActiveMode('sign-in'); setErrors({}); setFormError(''); setFormMessage(''); }}>
           Login
         </button>
         <button id="auth-tab-register" className={registering ? 'auth-tab auth-tab--active' : 'auth-tab'}
           type="button" role="tab" aria-selected={registering} aria-controls="auth-form"
-          onClick={() => { setActiveMode('register'); setErrors({}); setFormError(''); }}>
+          onClick={() => { setActiveMode('register'); setErrors({}); setFormError(''); setFormMessage(''); }}>
           Register
         </button>
       </div>
@@ -132,8 +140,8 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <AuthTextField id="auth-name" label="Full name" value={values.name} autoComplete="name"
           error={errors.name} onChange={(value) => update('name', value)} />
       )}
-      <AuthTextField id="auth-email" label="College email" type="email" value={values.email}
-        autoComplete="email" placeholder="you@adypu.edu.in" error={errors.email}
+      <AuthTextField id="auth-email" label="Email address" type="email" value={values.email}
+        autoComplete="email" placeholder="you@example.com" error={errors.email}
         onChange={(value) => update('email', value)} />
       <PasswordField id="auth-password" label="Password" value={values.password}
         autoComplete={registering ? 'new-password' : 'current-password'} error={errors.password}
@@ -159,6 +167,37 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </>
       )}
       {formError && <p className="form-error" role="alert">{formError}</p>}
+      {formMessage && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <p className="form-success" role="status">{formMessage}</p>
+          <button
+            type="button"
+            className="btn btn--outline"
+            style={{ fontSize: 13, padding: '6px 12px', alignSelf: 'flex-start' }}
+            disabled={submitting}
+            onClick={async () => {
+              if (!values.email) return;
+              try {
+                setFormMessage('Sending new confirmation email...');
+                const res = await fetch('/api/auth/resend-confirmation', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: values.email }),
+                });
+                if (res.ok) {
+                  setFormMessage('A new confirmation email has been sent. Check your inbox & spam folder.');
+                } else {
+                  setFormError('Unable to resend confirmation email. Please wait a moment before trying again.');
+                }
+              } catch {
+                setFormError('Network error trying to resend confirmation.');
+              }
+            }}
+          >
+            Resend confirmation email
+          </button>
+        </div>
+      )}
       {!registering && (
         <Link href="/auth/forgot-password" className="auth-form__forgot">Forgot password?</Link>
       )}

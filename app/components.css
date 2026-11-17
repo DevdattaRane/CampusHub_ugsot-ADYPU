@@ -127,9 +127,10 @@ button.day:hover, .day[aria-pressed='true'] { background: var(--primary); color:
 .event-card__place, .student-card__meta { margin-top: 4px; font-size: 14px; }
 .event-card__foot, .student-card__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 14px; border-top: var(--border); }
 .search-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
-.field { display: flex; flex: 1 1 320px; flex-direction: column; gap: 6px; }
-.field__label { font-size: 13px; font-weight: 700; }
-.input, .textarea { min-height: 48px; padding: 10px 14px; border: var(--border); border-radius: var(--radius); background: var(--card); font-size: 15px; }
+.search-row .field { flex: 1 1 320px; }
+.field { display: flex; flex-direction: column; gap: 6px; width: 100%; flex: 0 0 auto; }
+.field__label { display: block; font-size: 13px; font-weight: 700; }
+.input, .textarea, select { width: 100%; min-height: 48px; padding: 10px 14px; border: var(--border); border-radius: var(--radius); background: var(--card); font-size: 15px; font-family: inherit; }
 .textarea { resize: vertical; }
 .toggle-btn { min-height: 48px; padding: 0 16px; border: var(--border); border-radius: var(--radius); background: var(--card); font-size: 14px; font-weight: 700; cursor: pointer; }
 .toggle-btn[aria-pressed='true'] { background: var(--primary); color: var(--card); }
@@ -186,6 +187,10 @@ button.day:hover, .day[aria-pressed='true'] { background: var(--primary); color:
 .fab__icon { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: var(--card); font-size: 12px; font-weight: 700; }
 .fab__icon--me { background: var(--primary); color: var(--card); }
 
+@media (max-width: 768px) {
+  .fab { display: none !important; }
+}
+
 @media (max-width: 640px) {
   .calendar { padding: 18px; }
   .calendar__title { font-size: 26px; }
@@ -201,5 +206,8 @@ button.day:hover, .day[aria-pressed='true'] { background: var(--primary); color:
   .calendar--wide .day__marker { width: 5px; height: 5px; }
   .calendar__selected-event { align-items: flex-start; flex-direction: column; gap: 4px; }
   .filters__end { margin-left: 0; }
-  .fab { right: 16px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .fab { display: none !important; }
+  .podium-rank-1 { order: 1 !important; }
+  .podium-rank-2 { order: 2 !important; }
+  .podium-rank-3 { order: 3 !important; }
 }

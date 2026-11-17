@@ -7,15 +7,11 @@ type SignUpValues = SignInValues & {
   courseYear: string;
 };
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function validateEmail(email: string, errors: AuthErrors) {
-  const domain = process.env.NEXT_PUBLIC_COLLEGE_EMAIL_DOMAIN?.trim().toLowerCase();
-  if (!domain) {
-    errors.email = 'College email domain is not configured.';
-    return;
-  }
-  // The browser check is a convenience; enforce the college domain on the server in Phase 5.
-  if (!email.trim().toLowerCase().endsWith(`@${domain}`)) {
-    errors.email = `Use your @${domain} email.`;
+  if (!EMAIL_PATTERN.test(email.trim())) {
+    errors.email = 'Enter a valid email address.';
   }
 }
 

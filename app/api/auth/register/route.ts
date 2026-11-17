@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { signUp } from '@/lib/auth';
+import { AuthServiceError, signUp } from '@/lib/auth';
 import { isStringRecord, validateSignUp } from '@/lib/validation';
 
 export async function POST(request: Request) {
@@ -15,6 +15,17 @@ export async function POST(request: Request) {
   const errors = validateSignUp({ name, email, password, confirmPassword, courseYear });
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 400 });
 
-  await signUp(name, email);
-  return NextResponse.json({ success: true });
+  try {
+    const result = await signUp(name, email, password, courseYear);
+    return NextResponse.json({ success: true, ...result });
+  } catch (error) {
+    if (error instanceof AuthServiceError) {
+      return NextResponse.json({ form: error.message }, { status: error.status });
+    }
+    if (error instanceof Error && error.message.startsWith('Supabase is not configured.')) {
+      return NextResponse.json({ form: error.message }, { status: 503 });
+    }
+    console.error('Unable to register with Supabase.', error);
+    return NextResponse.json({ form: 'Registration is temporarily unavailable. Please try again.' }, { status: 503 });
+  }
 }

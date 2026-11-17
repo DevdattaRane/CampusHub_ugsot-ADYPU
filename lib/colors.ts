@@ -1,9 +1,9 @@
-import type { EventType, PostTag } from './types';
+import type { EventCategory, PostTag } from './types';
 
 const ink = 'var(--ink)';
 const card = 'var(--card)';
 
-export const typeColors: Record<EventType, { bg: string; fg: string }> = {
+export const typeColors: Record<EventCategory, { bg: string; fg: string }> = {
   Hackathon: { bg: 'var(--event-hackathon)', fg: ink },
   Workshop: { bg: 'var(--event-workshop)', fg: ink },
   Contest: { bg: 'var(--event-contest)', fg: ink },

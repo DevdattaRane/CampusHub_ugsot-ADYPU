@@ -38,10 +38,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           }`}
         </Script>
         <div id="app-content" tabIndex={-1}>
-          <NavBar />
+          <NavBar currentUser={currentUser} />
           {children}
           <ProfileFab />
-          <BottomNav />
+          <BottomNav currentUser={currentUser} />
         </div>
         <IntroScreen signedIn={!!currentUser} />
       </body>

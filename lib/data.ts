@@ -4,24 +4,24 @@
  */
 import type { CampusEvent, Highlight, Post, Student } from './types';
 
-export const CURRENT_USER_ID = 'aarav';
+export const CURRENT_USER_ID = 'student-dev';
 
 export const events: CampusEvent[] = [
-  { id: 'freshers-talk', title: 'Freshers’ tech talk', type: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Seminar Hall, Block A', start: '2026-10-17', deadline: '2026-10-16', registerUrl: '#' },
-  { id: 'smart-campus-ideathon', title: 'Smart campus ideathon', type: 'Hackathon', mode: 'Offline', where: 'In campus', place: 'Innovation Lab', start: '2026-10-24', end: '2026-10-25', deadline: '2026-10-20', registerUrl: '#' },
-  { id: 'git-workshop', title: 'Intro to Git & GitHub', type: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Seminar Hall, Block A', start: '2026-11-04', deadline: '2026-11-03', registerUrl: '#' },
-  { id: 'oss-sprint', title: 'Open-source sprint', type: 'Sprint', mode: 'Online', where: 'Out of campus', place: 'Online, Discord', start: '2026-11-07', deadline: '2026-11-06', registerUrl: '#' },
-  { id: 'design-jam', title: 'UI/UX Design Jam', type: 'Design jam', mode: 'Online', where: 'Out of campus', place: 'Online', start: '2026-11-11', deadline: '2026-11-09', registerUrl: '#' },
-  { id: 'campus-hackathon', title: 'Campus Hackathon 2026', type: 'Hackathon', mode: 'Offline', where: 'In campus', place: 'Main Auditorium', start: '2026-11-14', end: '2026-11-15', deadline: '2026-11-10', registerUrl: '#' },
-  { id: 'rapid-prototyping-workshop', title: 'Rapid Prototyping Workshop', type: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Innovation Lab', start: '2026-11-14', deadline: '2026-11-13', registerUrl: '#' },
-  { id: 'student-maker-meetup', title: 'Student Maker Meetup', type: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Project Studio', start: '2026-11-14', end: '2026-11-15', deadline: '2026-11-13', registerUrl: '#' },
-  { id: 'ml-circle', title: 'ML Paper Reading Circle', type: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Library, Room 2', start: '2026-11-18', deadline: '2026-11-17', registerUrl: '#' },
-  { id: 'codefest', title: 'Inter-college Codefest', type: 'Contest', mode: 'Offline', where: 'Out of campus', place: '[Host college, city]', start: '2026-11-21', deadline: '2026-11-15', registerUrl: '#' },
-  { id: 'resume-clinic', title: 'Resume & LinkedIn clinic', type: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Placement Cell', start: '2026-11-25', deadline: '2026-11-24', registerUrl: '#' },
-  { id: 'global-ai-hackathon', title: 'Global AI Hackathon', type: 'Hackathon', mode: 'Online', where: 'Out of campus', place: 'Online', start: '2026-11-27', end: '2026-11-29', deadline: '2026-11-20', registerUrl: '#' },
+  { id: 'freshers-talk', title: 'Freshers’ tech talk', type: 'event', category: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Seminar Hall, Block A', start: '2026-10-17', registrationDeadline: '2026-10-16', capacity: 120, registerUrl: '#' },
+  { id: 'smart-campus-ideathon', title: 'Smart campus ideathon', type: 'hackathon', category: 'Hackathon', mode: 'Offline', where: 'In campus', place: 'Innovation Lab', start: '2026-10-24', end: '2026-10-25', registrationDeadline: '2026-10-20', capacity: 60, teamSizeMin: 1, teamSizeMax: 4, theme: 'To be announced', prize: 'To be announced', rules: [], registerUrl: '#' },
+  { id: 'git-workshop', title: 'Intro to Git & GitHub', type: 'event', category: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Seminar Hall, Block A', start: '2026-11-04', registrationDeadline: '2026-11-03', capacity: 40, registerUrl: '#' },
+  { id: 'oss-sprint', title: 'Open-source sprint', type: 'event', category: 'Sprint', mode: 'Online', where: 'Out of campus', place: 'Online, Discord', start: '2026-11-07', registrationDeadline: '2026-11-06', capacity: 60, registerUrl: '#' },
+  { id: 'design-jam', title: 'UI/UX Design Jam', type: 'event', category: 'Design jam', mode: 'Online', where: 'Out of campus', place: 'Online', start: '2026-11-11', registrationDeadline: '2026-11-09', capacity: 30, registerUrl: '#' },
+  { id: 'campus-hackathon', title: 'Campus Hackathon 2026', type: 'hackathon', category: 'Hackathon', mode: 'Offline', where: 'In campus', place: 'Main Auditorium', start: '2026-11-14', end: '2026-11-15', registrationDeadline: '2026-11-10', capacity: 100, teamSizeMin: 1, teamSizeMax: 4, theme: 'To be announced', prize: 'To be announced', rules: [], registerUrl: '#' },
+  { id: 'rapid-prototyping-workshop', title: 'Rapid Prototyping Workshop', type: 'event', category: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Innovation Lab', start: '2026-11-14', registrationDeadline: '2026-11-13', capacity: 30, registerUrl: '#' },
+  { id: 'student-maker-meetup', title: 'Student Maker Meetup', type: 'event', category: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Project Studio', start: '2026-11-14', end: '2026-11-15', registrationDeadline: '2026-11-13', capacity: 50, registerUrl: '#' },
+  { id: 'ml-circle', title: 'ML Paper Reading Circle', type: 'event', category: 'Meetup', mode: 'Offline', where: 'In campus', place: 'Library, Room 2', start: '2026-11-18', registrationDeadline: '2026-11-17', capacity: 25, registerUrl: '#' },
+  { id: 'codefest', title: 'Inter-college Codefest', type: 'event', category: 'Contest', mode: 'Offline', where: 'Out of campus', place: 'Pune Tech Campus Auditorium, Pune', start: '2026-11-21', registrationDeadline: '2026-11-15', capacity: 200, registerUrl: '#' },
+  { id: 'resume-clinic', title: 'Resume & LinkedIn clinic', type: 'event', category: 'Workshop', mode: 'Offline', where: 'In campus', place: 'Placement Cell', start: '2026-11-25', registrationDeadline: '2026-11-24', capacity: 40, registerUrl: '#' },
+  { id: 'global-ai-hackathon', title: 'Global AI Hackathon', type: 'hackathon', category: 'Hackathon', mode: 'Online', where: 'Out of campus', place: 'Online', start: '2026-11-27', end: '2026-11-29', registrationDeadline: '2026-11-20', capacity: 200, teamSizeMin: 1, teamSizeMax: 4, theme: 'To be announced', prize: 'To be announced', rules: [], registerUrl: '#' },
 ];
 
-const links = { linkedin: 'linkedin.com/in/[username]', github: 'github.com/[username]', x: 'x.com/[username]', portfolio: '[yourportfolio.dev]' };
+const links = { linkedin: '', github: 'github.com/campus-hub', x: '', portfolio: '' };
 
 export const students: Student[] = [
   {

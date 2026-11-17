@@ -1,27 +1,26 @@
 import PageHero from '@/components/PageHero';
-import CommunityFeed from '@/components/CommunityFeed';
+import ForumView from '@/components/ForumView';
 import { getCurrentUser } from '@/lib/auth';
-import { posts } from '@/lib/data';
+import { getForumPosts } from '@/lib/db/forum';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Community · CampusHub · UGSOT' };
+export const metadata = { title: 'Developer Forum · CampusHub · UGSOT' };
 
 export default async function CommunityPage() {
-  const sorted = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  // This route is dynamic so relative post times should use the current request time.
-  // eslint-disable-next-line react-hooks/purity
-  const now = Date.now();
   const currentUser = await getCurrentUser();
+  const initialPosts = await getForumPosts();
+
   return (
     <main className="container page page--narrow">
       <PageHero
-        tag="Ask · Help · Build"
-        before="What’s "
-        highlight="up"
-        after="?"
-        sub="Ask questions, get unstuck, and find people to build with."
+        tag="Ask · Discuss · Build"
+        before="Developer "
+        highlight="Community Forum"
+        sub="Ask technical questions, discuss architectures, share solutions, and stay updated."
       />
-      <CommunityFeed initialPosts={sorted} now={now} currentUser={currentUser} />
+      <div style={{ marginTop: 24 }}>
+        <ForumView initialPosts={initialPosts} currentUser={currentUser} />
+      </div>
     </main>
   );
 }

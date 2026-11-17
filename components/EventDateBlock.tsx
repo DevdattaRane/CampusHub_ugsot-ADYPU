@@ -3,7 +3,7 @@ import { typeColors } from '@/lib/colors';
 import { MONTHS_SHORT, dayRange, parseDate } from '@/lib/dates';
 
 export default function EventDateBlock({ event, variant = 'agenda' }: { event: CampusEvent; variant?: 'agenda' | 'card' }) {
-  const c = typeColors[event.type];
+  const c = typeColors[event.category];
   const mon = MONTHS_SHORT[parseDate(event.start).getMonth()];
   return (
     <div

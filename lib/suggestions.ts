@@ -19,6 +19,7 @@ const SUGGESTIONS_KEY = 'campushub-suggestions-v1';
 const UPVOTES_KEY = 'campushub-suggestion-upvotes-v1';
 const SUGGESTIONS_EVENT = 'campushub-suggestions-changed';
 const UPVOTES_EVENT = 'campushub-upvotes-changed';
+const EMPTY_UPVOTED_IDS: string[] = [];
 
 export const STARTER_SUGGESTIONS: Suggestion[] = [
   {
@@ -51,7 +52,7 @@ export const STARTER_SUGGESTIONS: Suggestion[] = [
 let memorySuggestions: Suggestion[] = STARTER_SUGGESTIONS;
 let lastRawSuggestions: string | null = null;
 
-let memoryUpvotedIds: string[] = [];
+let memoryUpvotedIds: string[] = EMPTY_UPVOTED_IDS;
 let lastRawUpvotes: string | null = null;
 
 function safeLocalStorage(): Storage | null {
@@ -96,7 +97,11 @@ export function getUpvotedIds(): string[] {
 
   try {
     const raw = storage.getItem(UPVOTES_KEY);
-    if (!raw) return [];
+    if (!raw) {
+      lastRawUpvotes = null;
+      memoryUpvotedIds = EMPTY_UPVOTED_IDS;
+      return memoryUpvotedIds;
+    }
     if (raw === lastRawUpvotes) {
       return memoryUpvotedIds;
     }
@@ -106,7 +111,8 @@ export function getUpvotedIds(): string[] {
       memoryUpvotedIds = parsed;
       return memoryUpvotedIds;
     }
-    return [];
+    memoryUpvotedIds = EMPTY_UPVOTED_IDS;
+    return memoryUpvotedIds;
   } catch {
     return memoryUpvotedIds;
   }

@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState, type ReactNode } from 'react';
-import type { CampusEvent, EventType } from '@/lib/types';
+import type { CampusEvent, EventCategory } from '@/lib/types';
 import { typeColors, weekdayStripe } from '@/lib/colors';
 import { MONTHS, MONTHS_SHORT, eventDays, formatShort, parseDate, sameDay, toISO } from '@/lib/dates';
 import { ChevronLeft, ChevronRight, Sparkle } from './icons';
@@ -57,7 +58,7 @@ export default function Calendar({ events, today, selected = null, onSelect, wid
     onSelect?.(null);
   };
 
-  const legend = Object.keys(typeColors) as EventType[];
+  const legend = Object.keys(typeColors) as EventCategory[];
 
   return (
     <section className={`calendar${wide ? ' calendar--wide' : ''}`} aria-labelledby="calendar-title">
@@ -103,21 +104,21 @@ export default function Calendar({ events, today, selected = null, onSelect, wid
               const dayEvents = byDay.get(iso) ?? [];
               const isToday = sameDay(date, todayDate);
               const singleEvent = dayEvents.length === 1 ? dayEvents[0] : undefined;
-              const eventDescription = dayEvents.map((e) => `${e.title} (${e.type})`).join(', ');
+              const eventDescription = dayEvents.map((e) => `${e.title} (${e.category})`).join(', ');
               const content = (
                 <>
                   <span className="day__num">{num}</span>
                   {singleEvent ? (
                     <span className="day__single-event">
                       <span className="day__single-title">{singleEvent.title}</span>
-                      <span className="day__event-type">{singleEvent.type}</span>
+                      <span className="day__event-type">{singleEvent.category}</span>
                     </span>
                   ) : (
                     <>
                       {dayEvents.slice(0, MAX_CHIPS).map((e) => (
-                        <span key={e.id} className="sticker" style={{ background: typeColors[e.type].bg }} title={e.title}>
+                        <span key={e.id} className="sticker" style={{ background: typeColors[e.category].bg }} title={e.title}>
                           <span className="day__event-title">{e.title}</span>
-                          <span className="day__event-type">{e.type}</span>
+                          <span className="day__event-type">{e.category}</span>
                         </span>
                       ))}
                       {dayEvents.length > MAX_CHIPS && <span className="day__more">+{dayEvents.length - MAX_CHIPS} more</span>}
@@ -126,7 +127,7 @@ export default function Calendar({ events, today, selected = null, onSelect, wid
                   {dayEvents.length > 0 && (
                     <span className="day__markers" aria-hidden="true">
                       {dayEvents.map((e) => (
-                        <span key={e.id} className="day__marker" style={{ background: typeColors[e.type].bg }} />
+                        <span key={e.id} className="day__marker" style={{ background: typeColors[e.category].bg }} />
                       ))}
                     </span>
                   )}
@@ -134,7 +135,7 @@ export default function Calendar({ events, today, selected = null, onSelect, wid
               );
               const label = `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}${isToday ? ', today' : ''}${dayEvents.length ? `: ${eventDescription}` : ', no events'}`;
               const className = `${cls}${isToday ? ' day--today' : ''}${singleEvent ? ' day--single' : ''}`;
-              const style = singleEvent ? { background: typeColors[singleEvent.type].bg } : undefined;
+              const style = singleEvent ? { background: typeColors[singleEvent.category].bg } : undefined;
 
               return selectable ? (
                 <button key={iso} type="button" className={className} style={style} title={eventDescription || undefined} aria-label={label} aria-pressed={selected === iso} onClick={() => onSelect?.(selected === iso ? null : iso)}>
@@ -157,9 +158,13 @@ export default function Calendar({ events, today, selected = null, onSelect, wid
         <section className="calendar__selected-events" aria-live="polite" aria-label={`Events on ${formatShort(selected)}`}>
           <h3 className="agenda__title">Events on {formatShort(selected)}</h3>
           {(byDay.get(selected) ?? []).length ? (byDay.get(selected) ?? []).map((event) => (
-            <article key={event.id} className="calendar__selected-event" style={{ background: typeColors[event.type].bg }}>
-              <strong title={event.title}>{event.title}</strong>
-              <span className="calendar__selected-type">{event.type}</span>
+            <article key={event.id} className="calendar__selected-event" style={{ background: typeColors[event.category].bg }}>
+              <strong title={event.title}>
+                {event.type === 'hackathon'
+                  ? <Link href={`/events/${event.id}`} className="event-card__title-link">{event.title}</Link>
+                  : event.title}
+              </strong>
+              <span className="calendar__selected-type">{event.category}</span>
             </article>
           )) : <p className="agenda__empty">No events on this day.</p>}
         </section>

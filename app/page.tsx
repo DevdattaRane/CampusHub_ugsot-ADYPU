@@ -2,13 +2,15 @@ import Link from 'next/link';
 import HomeCalendar from '@/components/HomeCalendar';
 import TeammateCard from '@/components/TeammateCard';
 import Avatar from '@/components/Avatar';
-import { getStudent, events, highlights, posts } from '@/lib/data';
+import { getStudent, events, highlights } from '@/lib/data';
 import { getCurrentUser } from '@/lib/auth';
-import { typeColors, tagColors } from '@/lib/colors';
+import { typeColors } from '@/lib/colors';
 import { eventDays, formatShort, formatWeekday, todayISO, toISO } from '@/lib/dates';
 import Card from '@/components/ui/Card';
 import Tag from '@/components/ui/Tag';
 import FeatureSuggestions from '@/components/FeatureSuggestions';
+import { getEventRegistrationStatuses, type EventRegistrationStatus } from '@/lib/db/events';
+import { getForumPosts } from '@/lib/db/forum';
 
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Home · CampusHub · UGSOT' };
@@ -28,9 +30,23 @@ export default async function HomePage() {
       return iso > today && iso <= weekEnd;
     }))
     .sort((a, b) => a.start.localeCompare(b.start));
-  const latestPosts = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
+  let latestPosts: Awaited<ReturnType<typeof getForumPosts>> = [];
+  try {
+    const forumPosts = await getForumPosts();
+    latestPosts = forumPosts.slice(0, 3);
+  } catch {
+    latestPosts = [];
+  }
   const currentUser = await getCurrentUser();
   const firstName = currentUser?.name.split(' ')[0] ?? 'there';
+  let registrationStatuses: EventRegistrationStatus[] = [];
+  let registrationUnavailable = false;
+  try {
+    registrationStatuses = await getEventRegistrationStatuses(events.map((event) => event.id));
+  } catch (error) {
+    console.error('Unable to load home event registration availability.', error);
+    registrationUnavailable = true;
+  }
 
   return (
     <main className="container page home-page">
@@ -54,12 +70,12 @@ export default async function HomePage() {
         {todayEvents.length ? (
           <div className="today-list">
             {todayEvents.map((event) => (
-              <Link key={event.id} href="/events" className="today-event" style={{ background: typeColors[event.type].bg }}>
+              <Link key={event.id} href="/events" className="today-event" style={{ background: typeColors[event.category].bg }}>
                 <span className="today-event__copy">
                   <strong>{event.title}</strong>
                   <span>{event.place} · {event.mode}</span>
                 </span>
-                <Tag>{event.type}</Tag>
+                <Tag>{event.category}</Tag>
               </Link>
             ))}
           </div>
@@ -81,7 +97,7 @@ export default async function HomePage() {
                 <Link key={event.id} href="/events" className="week-event">
                   <span className="week-event__date">{formatShort(event.start)}</span>
                   <span className="week-event__name">{event.title}</span>
-                  <Tag style={{ background: typeColors[event.type].bg }}>{event.type}</Tag>
+                  <Tag style={{ background: typeColors[event.category].bg }}>{event.category}</Tag>
                 </Link>
               ))}
             </div>
@@ -101,16 +117,13 @@ export default async function HomePage() {
         </div>
         {latestPosts.length ? (
           <div className="post-grid">
-            {latestPosts.map((post) => {
-              const author = getStudent(post.authorId);
-              return (
-                <Link key={post.id} href="/community" className="post-card">
-                  <Tag style={{ background: tagColors[post.tag].bg }}>{post.tag}</Tag>
-                  <span className="post-card__title">{post.title}</span>
-                  <span className="post-card__meta">{author?.name ?? 'Campus student'} · {post.replies} replies</span>
-                </Link>
-              );
-            })}
+            {latestPosts.map((post) => (
+              <Link key={post.id} href={`/forum/${post.id}`} className="post-card">
+                <Tag style={{ background: '#FFE14D' }}>{post.tags[0] || post.type}</Tag>
+                <span className="post-card__title">{post.title}</span>
+                <span className="post-card__meta">{post.authorName} · {post.answersCount} {post.answersCount === 1 ? 'reply' : 'replies'}</span>
+              </Link>
+            ))}
           </div>
         ) : (
           <p className="empty">No community posts yet. Start the first conversation.</p>
@@ -146,7 +159,8 @@ export default async function HomePage() {
 
       <details className="home-calendar">
         <summary>Browse the full event calendar</summary>
-        <HomeCalendar events={events} today={today} />
+        <HomeCalendar events={events} today={today} signedIn={Boolean(currentUser)}
+          statuses={registrationStatuses} registrationUnavailable={registrationUnavailable} />
       </details>
 
       <section id="feature-suggestions" className="home-section" aria-labelledby="features-title">

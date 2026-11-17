@@ -20,13 +20,14 @@ type FeatureSuggestionsProps = {
 
 const TITLE_MAX = 80;
 const DESC_MAX = 300;
+const SERVER_UPVOTED_IDS: string[] = [];
 
 function getServerSuggestions() {
   return STARTER_SUGGESTIONS;
 }
 
 function getServerUpvotedIds() {
-  return [];
+  return SERVER_UPVOTED_IDS;
 }
 
 export default function FeatureSuggestions({ defaultAuthor = '' }: FeatureSuggestionsProps) {
