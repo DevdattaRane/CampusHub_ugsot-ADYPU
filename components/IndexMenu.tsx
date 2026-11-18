@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { CurrentUser } from '@/lib/auth';
 import { getVisibleSiteNavigationGroups } from './site-navigation';
-import GlassPanel from './effects/GlassPanel';
 
 type Props = {
   open: boolean;
@@ -52,7 +51,6 @@ export default function IndexMenu({ open, currentUser, onClose }: Props) {
 
   return (
     <div ref={menuRef} className="index-menu" role="dialog" aria-modal="true" aria-label="Campus index">
-      <GlassPanel className="index-menu__backdrop" aria-hidden="true" />
       <div className="index-menu__head">
         <span className="mono">Index</span>
         <button type="button" className="pill-control" onClick={onClose}>Close</button>

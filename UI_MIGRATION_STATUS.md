@@ -15,11 +15,11 @@ Bring every route and shared component into the visual system defined by `ugsot-
 
 Existing work on the current branch; these are foundations or partial page treatments, not evidence that the full site migration is complete:
 
-- `app/globals.css` — shared tokens and existing design/effect styles.
+- `app/globals.css` — shared tokens, 1100px app container, shared primitives, and existing effect styles.
 - `app/welcome/page.tsx`, `components/landing/WelcomeExperience.tsx` — existing landing experience; density and content still need improvement.
 - `app/auth/layout.tsx`, `components/auth/` — new auth visual shell and existing forms; audit form controls and consistency.
 - `components/NavBar.tsx`, `components/SiteShell.tsx`, `components/SiteRail.tsx`, `components/SiteFooter.tsx` — shared navigation/shell foundations.
-- `components/IndexMenu.tsx` — existing Index overlay; still needs the required opaque full-screen treatment.
+- `components/IndexMenu.tsx` — opaque full-screen Index overlay with 28–44px links.
 - `components/effects/` — lazy effect components and fallbacks already exist.
 - `components/GlobalMotion.tsx`, `components/GlobalSearchModal.tsx`, `components/ui/Toast.tsx` — existing motion/search/toast foundations.
 - `app/loading.tsx` — shared ruled-row loading skeleton.
@@ -27,7 +27,7 @@ Existing work on the current branch; these are foundations or partial page treat
 
 ## In progress
 
-- Step 1: inventory and status tracking. No UI migration edits are in progress.
+- Step 2 shared-system group is committed. Build validation is blocked by TypeScript errors in the pre-existing `refrence-repos/` tree; waiting for user direction before continuing.
 
 ## Remaining checklist
 
@@ -82,7 +82,7 @@ Existing work on the current branch; these are foundations or partial page treat
 - [ ] `components/HackathonTeamRegistration.tsx`
 - [ ] `components/Header.tsx`
 - [ ] `components/HomeCalendar.tsx`
-- [ ] `components/IndexMenu.tsx` (existing overlay; make it opaque and full-screen)
+- [x] `components/IndexMenu.tsx` (opaque full-screen overlay; 28–44px links)
 - [ ] `components/LeaderboardView.tsx` (partial empty-state styling; migrate full view)
 - [ ] `components/MentorshipView.tsx` (partial empty-state styling)
 - [ ] `components/ModerationView.tsx` (partial empty-state styling)
@@ -106,16 +106,16 @@ Existing work on the current branch; these are foundations or partial page treat
 
 ### UI primitives
 
-- [ ] `components/ui/Box.tsx`
-- [ ] `components/ui/Button.tsx`
-- [ ] `components/ui/Card.tsx`
-- [ ] `components/ui/Input.tsx`
+- [x] `components/ui/Box.tsx`
+- [x] `components/ui/Button.tsx`
+- [x] `components/ui/Card.tsx`
+- [x] `components/ui/Input.tsx`
 - [ ] `components/ui/LiquidLogo.tsx`
-- [ ] `components/ui/Modal.tsx`
-- [ ] `components/ui/Pill.tsx`
+- [x] `components/ui/Modal.tsx`
+- [x] `components/ui/Pill.tsx`
 - [ ] `components/ui/SvgDefs.tsx`
-- [ ] `components/ui/Tag.tsx`
-- [ ] `components/ui/Tile.tsx`
+- [x] `components/ui/Tag.tsx`
+- [x] `components/ui/Tile.tsx`
 - [ ] `components/ui/Toast.tsx` (existing glass treatment; audit colors, borders, and focus)
 
 ### Effects and page-specific components
@@ -136,7 +136,7 @@ Existing work on the current branch; these are foundations or partial page treat
 ## Known issues
 
 - Existing untracked workspace items (`.DS_Store`, `INTEGRATION.md`, `refrence-repos/`, `ugsot-campus-hub.html`) are unrelated and must not be added to migration commits.
-- Earlier `npm run build` compiled the app but TypeScript checking reported errors inside `refrence-repos/`.
+- `npm run build` compiles the app, then TypeScript checking fails on existing errors inside `refrence-repos/` (including missing reference-repo dependencies and an incompatible `appIsrStatus` config option).
 - Earlier full lint was blocked by an unresolved `@eslint/eslintrc` dependency in `refrence-repos/`; scoped lint excluding that directory passed.
 - Legacy hardcoded colors, emoji, thick borders, and shadows still need a systematic audit.
 
@@ -150,5 +150,5 @@ Existing work on the current branch; these are foundations or partial page treat
 ## How another AI should resume
 
 ```text
-Resume the UI migration in this repository. Read UI_MIGRATION_STATUS.md first and continue with the first unchecked work item. Preserve all behavior: do not touch API/database/Supabase/auth callbacks/config/data fetching/props/hooks/handlers/actions/routes. Use only existing CSS palette variables and the prototype ugsot-campus-hub.html. Work in a small page/component group, update the status file, run npm run build and npm run lint, and commit only the files for that group plus UI_MIGRATION_STATUS.md. Do not stage unrelated untracked files. Stop after the group and report the changed files and build/lint result.
+Resume the UI migration in this repository. Read UI_MIGRATION_STATUS.md first. Step 2 is committed; next work on Opportunities (`app/opportunities/page.tsx` and `components/OpportunitiesView.tsx`) as one small group. Preserve all behavior: do not touch API/database/Supabase/auth callbacks/config/data fetching/props/hooks/handlers/actions/routes. Use only existing CSS palette variables and the prototype ugsot-campus-hub.html. Update the status file, run npm run build and npm run lint, and commit only the files for that group plus UI_MIGRATION_STATUS.md. Do not stage unrelated untracked files. The normal build is known to fail in `refrence-repos/`; do not change that tree or configs. Stop if that remains the only failure and report changed files plus validation results.
 ```
