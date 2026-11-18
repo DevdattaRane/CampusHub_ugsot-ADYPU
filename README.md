@@ -110,3 +110,7 @@ All database calls are strictly isolated within `lib/db/`:
 - `lib/db/dashboard.ts`
 
 Only the publishable client key (`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`) is used; service-role keys are never included or exposed.
+
+## Third-party notices
+
+- Paper Shaders (`@paper-design/shaders-react` and `@paper-design/shaders`) version 0.0.82 is Copyright 2026 Paper and licensed under the Apache License, Version 2.0. The installed packages include the full license and attribution notice in their `LICENSE` and `NOTICE` files.

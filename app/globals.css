@@ -829,12 +829,14 @@ textarea::placeholder {
   position: relative;
   width: 80%;
   padding: 18px 20px;
-  border: 1px solid rgb(255 255 255 / 70%);
+  border: 1px solid var(--line);
   border-radius: 20px;
-  background: rgb(255 255 255 / 42%);
-  color: #191B22;
-  box-shadow: inset 0 1px 0 #fff, 0 14px 34px rgb(25 27 34 / 20%);
-  backdrop-filter: url(#lgf) blur(10px) saturate(1.6);
+  background: var(--canvas);
+  background: color-mix(in srgb, var(--canvas) 84%, transparent);
+  color: var(--ink);
+  box-shadow: 0 14px 34px rgb(25 27 34 / 10%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .lg h3 {
@@ -844,7 +846,7 @@ textarea::placeholder {
 }
 
 .lg .m {
-  color: #3D4150;
+  color: var(--muted);
 }
 
 @keyframes float {
@@ -1897,11 +1899,159 @@ textarea {
 }
 
 .lg {
-  background: radial-gradient(
+  background-image: radial-gradient(
     circle at var(--mx, 30%) var(--my, 0%),
-    rgb(255 255 255 / 80%),
-    rgb(255 255 255 / 42%) 60%
+    color-mix(in srgb, var(--canvas) 96%, transparent),
+    color-mix(in srgb, var(--canvas) 84%, transparent) 60%
   );
+}
+
+.glass-panel {
+  width: auto;
+  padding: 20px;
+}
+
+.glass-panel:focus-within {
+  outline: 2px solid var(--electric-blue);
+  outline-offset: 3px;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .lg {
+    background: var(--canvas);
+    background-image: none;
+  }
+}
+
+.shader-background {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.shader-background--mesh {
+  background: radial-gradient(ellipse at 24% 22%, var(--electric-blue), var(--canvas) 72%);
+}
+
+.shader-background--grain {
+  background: radial-gradient(ellipse at 76% 34%, var(--coral), var(--canvas) 72%);
+}
+
+.shader-background__paint {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+
+.shader-background__paint > div {
+  position: absolute;
+  inset: 0;
+}
+
+.shader-background__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: inherit;
+  place-items: center;
+  padding: 24px;
+}
+
+.effects-liquid-logo {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+}
+
+.effects-liquid-logo > svg {
+  display: block;
+}
+
+.effects-liquid-logo > div {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.effects-liquid-logo canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.effects-preview {
+  gap: 12px;
+  padding-top: 40px;
+}
+
+.effects-preview > h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.05;
+}
+
+.effects-preview__body {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.effects-preview__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.effects-preview__controls [aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.effects-preview__stage {
+  display: grid;
+  min-height: 340px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background-color: var(--canvas);
+}
+
+.effects-preview__content {
+  display: grid;
+  width: 100%;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+}
+
+.effects-preview__panel {
+  width: min(100%, 440px);
+  text-align: left;
+}
+
+.effects-preview__panel h2 {
+  margin: 10px 0 8px;
+  font-size: clamp(20px, 3vw, 28px);
+}
+
+.effects-preview__panel p {
+  color: var(--muted);
+}
+
+.effects-preview__logo-stage {
+  align-content: center;
+  justify-items: center;
+  gap: 18px;
+  background: radial-gradient(circle at 50% 28%, var(--stone), var(--canvas) 70%);
+}
+
+@media (max-width: 640px) {
+  .effects-preview__stage {
+    min-height: 280px;
+  }
 }
 
 @media (pointer: coarse) {
