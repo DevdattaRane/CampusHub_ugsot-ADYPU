@@ -762,7 +762,7 @@
 .input--error,
 .textarea--error {
   border-color: var(--accent);
-  background: #FFF4F2;
+  background: var(--canvas);
 }
 
 .suggestions-form {

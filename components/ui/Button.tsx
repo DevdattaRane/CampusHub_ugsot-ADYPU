@@ -5,5 +5,5 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export default function Button({ variant = 'primary', className = '', type = 'button', ...props }: ButtonProps) {
-  return <button type={type} className={`btn btn--${variant} ${className}`.trim()} {...props} />;
+  return <button type={type} data-magnetic className={`btn btn--${variant} ${className}`.trim()} {...props} />;
 }

@@ -37,6 +37,7 @@ export default function GlobalMotion() {
     const cursor = document.getElementById('cursor-dot');
     const parallaxTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
     const marqueeTracks = Array.from(document.querySelectorAll<HTMLElement>('[data-marquee-track]'));
+    const glassCards = Array.from(document.querySelectorAll<HTMLElement>('.lg'));
     const pointerPosition = cursorPosition.current;
     let lastY = window.scrollY;
     let direction = 1;
@@ -54,6 +55,21 @@ export default function GlobalMotion() {
       );
     };
 
+    const onGlassMove = (event: PointerEvent) => {
+      const element = event.currentTarget as HTMLElement;
+      const bounds = element.getBoundingClientRect();
+      if (bounds.width === 0 || bounds.height === 0) return;
+      const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+      const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+      element.style.setProperty('--mx', `${x}%`);
+      element.style.setProperty('--my', `${y}%`);
+    };
+    const onGlassLeave = (event: PointerEvent) => {
+      const element = event.currentTarget as HTMLElement;
+      element.style.removeProperty('--mx');
+      element.style.removeProperty('--my');
+    };
+
     const magneticTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'));
     const onMagneticMove = (event: PointerEvent) => {
       const element = event.currentTarget as HTMLElement;
@@ -68,12 +84,6 @@ export default function GlobalMotion() {
       element.style.setProperty('--magnetic-x', '0px');
       element.style.setProperty('--magnetic-y', '0px');
     };
-
-    magneticTargets.forEach((element) => {
-      element.classList.add('magnetic');
-      element.addEventListener('pointermove', onMagneticMove);
-      element.addEventListener('pointerleave', onMagneticLeave);
-    });
 
     const animate = () => {
       const currentY = window.scrollY;
@@ -111,6 +121,17 @@ export default function GlobalMotion() {
       if (hasFinePointer && cursor) {
         window.addEventListener('pointermove', onPointerMove);
       }
+      if (hasFinePointer) {
+        glassCards.forEach((element) => {
+          element.addEventListener('pointermove', onGlassMove);
+          element.addEventListener('pointerleave', onGlassLeave);
+        });
+        magneticTargets.forEach((element) => {
+          element.classList.add('magnetic');
+          element.addEventListener('pointermove', onMagneticMove);
+          element.addEventListener('pointerleave', onMagneticLeave);
+        });
+      }
       animationFrame = requestAnimationFrame(animate);
     }
 
@@ -121,6 +142,10 @@ export default function GlobalMotion() {
       if (hasFinePointer && cursor) {
         window.removeEventListener('pointermove', onPointerMove);
       }
+      glassCards.forEach((element) => {
+        element.removeEventListener('pointermove', onGlassMove);
+        element.removeEventListener('pointerleave', onGlassLeave);
+      });
       magneticTargets.forEach((element) => {
         element.removeEventListener('pointermove', onMagneticMove);
         element.removeEventListener('pointerleave', onMagneticLeave);

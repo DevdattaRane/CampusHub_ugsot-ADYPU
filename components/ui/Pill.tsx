@@ -5,5 +5,5 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export default function Pill({ className = '', variant = 'default', ...props }: Props) {
-  return <button className={`ui-pill ui-pill--${variant} ${className}`.trim()} {...props} />;
+  return <button data-magnetic className={`ui-pill ui-pill--${variant} ${className}`.trim()} {...props} />;
 }
