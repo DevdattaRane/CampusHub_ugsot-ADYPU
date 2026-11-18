@@ -16,7 +16,8 @@ Bring every route and shared component into the visual system defined by `ugsot-
 Existing work on the current branch; these are foundations or partial page treatments, not evidence that the full site migration is complete:
 
 - `app/globals.css` — shared tokens, 1100px app container, shared primitives, and existing effect styles.
-- `app/welcome/page.tsx`, `components/landing/WelcomeExperience.tsx` — existing landing experience; density and content still need improvement.
+- `app/welcome/page.tsx`, `components/landing/WelcomeExperience.tsx` — existing landing content and layout; event/project listings remain neutral where verified data is unavailable.
+- `components/landing/welcome.module.css` — widened the landing shell to 1280px, balanced the 12-column hero, increased type and row scale, and tightened section spacing.
 - `app/auth/layout.tsx`, `components/auth/` — new auth visual shell and existing forms; audit form controls and consistency.
 - `components/NavBar.tsx`, `components/SiteShell.tsx`, `components/SiteRail.tsx`, `components/SiteFooter.tsx` — shared navigation/shell foundations.
 - `components/IndexMenu.tsx` — opaque full-screen Index overlay with 28–44px links.
@@ -27,14 +28,14 @@ Existing work on the current branch; these are foundations or partial page treat
 
 ## In progress
 
-- Step 2 shared-system group is committed. Build validation is blocked by TypeScript errors in the pre-existing `refrence-repos/` tree; waiting for user direction before continuing.
+- Landing visual fix is committed. Responsive checks pass; production build remains blocked by TypeScript errors in the pre-existing `refrence-repos/` tree. Pausing before the Opportunities group per the build-failure rule.
 
 ## Remaining checklist
 
 ### Routes (`app/**/page.tsx`)
 
 - [ ] `/` — `app/page.tsx` (dashboard)
-- [ ] `/welcome` — `app/welcome/page.tsx` (existing design; fill empty space and improve density)
+- [x] `/welcome` — `app/welcome/page.tsx`, `components/landing/WelcomeExperience.tsx`, `components/landing/welcome.module.css` (wider layout, larger type, denser section rhythm; neutral empty-state copy retained)
 - [ ] `/events` — `app/events/page.tsx`
 - [ ] `/events/[eventId]` — `app/events/[eventId]/page.tsx`
 - [ ] `/events/[eventId]/attendance` — `app/events/[eventId]/attendance/page.tsx`
@@ -131,12 +132,13 @@ Existing work on the current branch; these are foundations or partial page treat
 - [ ] `components/auth/ResetPasswordForm.tsx`
 - [ ] `components/auth/SignOutButton.tsx`
 - [ ] `components/intro/IntroScreen.tsx`
-- [ ] `components/landing/WelcomeExperience.tsx` (existing design; landing content/density work remains)
+- [x] `components/landing/WelcomeExperience.tsx` (existing markup now uses the widened, denser visual layout)
 
 ## Known issues
 
 - Existing untracked workspace items (`.DS_Store`, `INTEGRATION.md`, `refrence-repos/`, `ugsot-campus-hub.html`) are unrelated and must not be added to migration commits.
 - `npm run build` compiles the app, then TypeScript checking fails on existing errors inside `refrence-repos/` (including missing reference-repo dependencies and an incompatible `appIsrStatus` config option).
+- `app/welcome/page.tsx` currently supplies an empty upcoming-event list because the sample event data is not verified live data; keep neutral copy unless an existing read-only live-data helper is available.
 - Earlier full lint was blocked by an unresolved `@eslint/eslintrc` dependency in `refrence-repos/`; scoped lint excluding that directory passed.
 - Legacy hardcoded colors, emoji, thick borders, and shadows still need a systematic audit.
 
@@ -150,5 +152,5 @@ Existing work on the current branch; these are foundations or partial page treat
 ## How another AI should resume
 
 ```text
-Resume the UI migration in this repository. Read UI_MIGRATION_STATUS.md first. Step 2 is committed; next work on Opportunities (`app/opportunities/page.tsx` and `components/OpportunitiesView.tsx`) as one small group. Preserve all behavior: do not touch API/database/Supabase/auth callbacks/config/data fetching/props/hooks/handlers/actions/routes. Use only existing CSS palette variables and the prototype ugsot-campus-hub.html. Update the status file, run npm run build and npm run lint, and commit only the files for that group plus UI_MIGRATION_STATUS.md. Do not stage unrelated untracked files. The normal build is known to fail in `refrence-repos/`; do not change that tree or configs. Stop if that remains the only failure and report changed files plus validation results.
+Resume the UI migration in this repository. Read UI_MIGRATION_STATUS.md first. The shared-system group and landing visual fix are committed; next work on Opportunities (`app/opportunities/page.tsx` and `components/OpportunitiesView.tsx`) as one small group after the user authorizes continuing. Preserve all behavior: do not touch API/database/Supabase/auth callbacks/config/data fetching/props/hooks/handlers/actions/routes. Use only existing CSS palette variables and the prototype ugsot-campus-hub.html. Update the status file, run npm run build and npm run lint, and commit only the files for that group plus UI_MIGRATION_STATUS.md. Do not stage unrelated untracked files. The normal build is known to fail in `refrence-repos/`; do not change that tree or configs. Stop if that remains the only failure and report changed files plus validation results.
 ```

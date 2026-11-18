@@ -1,5 +1,5 @@
 .welcomePage {
-  --welcome-max: 1320px;
+  --welcome-max: 1280px;
   width: 100%;
   overflow: hidden;
   color: var(--ink);
@@ -13,6 +13,11 @@
 
 :global(.route-content--landing) {
   width: 100%;
+  max-width: none;
+}
+
+:global(.site-layout--landing .site-content) {
+  max-width: none;
 }
 
 .header {
@@ -106,15 +111,16 @@
 .hero {
   display: grid;
   width: min(100%, var(--welcome-max));
-  min-height: 470px;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.92fr);
+  min-height: 460px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: center;
-  gap: clamp(28px, 5vw, 72px);
+  gap: 12px;
   margin: 0 auto;
-  padding: 56px clamp(16px, 3vw, 40px) 48px;
+  padding: 56px clamp(16px, 3vw, 40px);
 }
 
 .heroCopy {
+  grid-column: span 6;
   max-width: 580px;
 }
 
@@ -132,14 +138,14 @@
 .hero h1 {
   max-width: 620px;
   margin: 12px 0 18px;
-  font: 700 clamp(38px, 5.2vw, 64px)/1.04 var(--font-space-grotesk), sans-serif;
+  font: 700 clamp(44px, 5.4vw, 76px)/1.02 var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.055em;
 }
 
 .heroDescription {
   max-width: 470px;
   color: var(--muted);
-  font-size: 16px;
+  font-size: clamp(18px, 1.4vw, 20px);
   line-height: 1.65;
 }
 
@@ -156,11 +162,13 @@
 }
 
 .heroVisual {
+  grid-column: span 6;
   min-width: 0;
 }
 
 .heroShader {
-  height: 390px;
+  height: 460px;
+  min-height: 460px;
   border: 1px solid var(--line);
   border-radius: 24px;
 }
@@ -218,6 +226,16 @@
 }
 
 .heroLogo :global(.effects-liquid-logo) {
+  width: 220px !important;
+  height: 220px !important;
+}
+
+.heroLogo :global(svg) {
+  width: 220px;
+  height: 220px;
+}
+
+.heroLogo :global(.effects-liquid-logo) {
   overflow: visible;
 }
 
@@ -261,19 +279,23 @@
 }
 
 .section {
-  padding-top: 38px;
+  padding-top: 64px;
+}
+
+.section:first-child {
+  padding-top: 28px;
 }
 
 .sectionHeading {
   align-items: flex-end;
-  padding: 34px 0 16px;
+  padding: 0 0 16px;
 }
 
 .maskTitle {
   overflow: hidden;
   padding: 0.08em 0 0.12em;
   margin: -0.08em 0 -0.12em;
-  font: 600 clamp(24px, 3.2vw, 38px)/1.06 var(--font-space-grotesk), sans-serif;
+  font: 600 clamp(28px, 3vw, 40px)/1.06 var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.045em;
 }
 
@@ -299,11 +321,11 @@
 
 .destinationRow {
   display: grid;
-  min-height: 82px;
-  grid-template-columns: 52px minmax(130px, 0.72fr) minmax(200px, 1.4fr) 24px;
+  min-height: 96px;
+  grid-template-columns: 52px minmax(180px, 0.9fr) minmax(300px, 1.6fr) 28px;
   align-items: center;
   gap: 18px;
-  padding: 14px 10px;
+  padding: 18px 10px;
   border-bottom: 1px solid var(--line);
   color: var(--ink);
   text-decoration: none;
@@ -354,19 +376,19 @@
 }
 
 .rowTitle {
-  font: 500 clamp(20px, 2.2vw, 28px)/1.2 var(--font-space-grotesk), sans-serif;
+  font: 500 clamp(26px, 2.4vw, 32px)/1.2 var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.03em;
 }
 
 .rowDescription {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.45;
 }
 
 .rowArrow {
   justify-self: end;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .eventRow {
@@ -441,7 +463,7 @@
   padding: 18px 0;
   border-bottom: 1px solid var(--line);
   color: var(--muted);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .projectTiles {
@@ -468,7 +490,7 @@
 
 .projectBlue {
   background: var(--electric-blue);
-  color: #fff;
+  color: var(--canvas);
 }
 
 .projectInk {
@@ -478,12 +500,12 @@
 
 .projectMint {
   background: var(--mint);
-  color: #191B22;
+  color: var(--ink);
 }
 
 .tileMark {
   align-self: flex-end;
-  font: 600 clamp(56px, 8vw, 88px)/0.9 var(--font-space-grotesk), sans-serif;
+  font: 600 clamp(64px, 8vw, 104px)/0.9 var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.07em;
   opacity: 0.7;
 }
@@ -500,7 +522,7 @@
 
 .projectTile > span:last-child > span {
   max-width: 300px;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.5;
   opacity: 0.78;
 }
@@ -531,8 +553,9 @@
 }
 
 .finalCta {
-  width: min(100% - 32px, var(--welcome-max) - 48px);
-  margin: 72px auto 80px;
+  width: min(100%, var(--welcome-max));
+  margin: 64px auto 80px;
+  padding: 0 clamp(16px, 3vw, 40px);
 }
 
 .finalShader {
@@ -570,23 +593,23 @@
 
 @media (max-width: 900px) {
   .hero {
-    min-height: 0;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
-    gap: 28px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .heroShader {
-    height: 340px;
+    height: 460px;
+    min-height: 460px;
   }
 
   .heroLogo :global(.effects-liquid-logo) {
-    width: 140px !important;
-    height: 140px !important;
+    width: 180px !important;
+    height: 180px !important;
   }
 
   .heroLogo :global(svg) {
-    width: 140px;
-    height: 140px;
+    width: 180px;
+    height: 180px;
   }
 
   .nextCard {
@@ -597,8 +620,8 @@
   }
 
   .destinationRow {
-    grid-template-columns: 40px minmax(120px, 0.8fr) minmax(170px, 1.3fr) 20px;
-    gap: 12px;
+    grid-template-columns: 40px minmax(140px, 0.8fr) minmax(210px, 1.3fr) 24px;
+    gap: 14px;
   }
 }
 
@@ -654,14 +677,24 @@
   }
 
   .hero {
+    min-height: 0;
     grid-template-columns: minmax(0, 1fr);
-    gap: 30px;
-    padding-top: 38px;
+    gap: 32px;
+    padding: 40px 16px 32px;
+  }
+
+  .heroCopy,
+  .heroVisual {
+    grid-column: 1 / -1;
   }
 
   .hero h1 {
     max-width: 520px;
-    font-size: clamp(36px, 10vw, 54px);
+    font-size: clamp(44px, 10.5vw, 54px);
+  }
+
+  .heroDescription {
+    font-size: 18px;
   }
 
   .heroVisual {
@@ -669,32 +702,48 @@
   }
 
   .heroShader {
-    height: 330px;
+    height: 340px;
+    min-height: 340px;
   }
 
   .heroLogo :global(.effects-liquid-logo) {
-    width: 132px !important;
-    height: 132px !important;
+    width: 148px !important;
+    height: 148px !important;
   }
 
   .heroLogo :global(svg) {
-    width: 132px;
-    height: 132px;
+    width: 148px;
+    height: 148px;
   }
 
   .destinationRow {
-    min-height: 74px;
-    grid-template-columns: 34px minmax(0, 1fr) 20px;
-    gap: 10px;
-    padding: 12px 4px;
+    min-height: 96px;
+    grid-template-columns: 32px minmax(0, 1fr) 24px;
+    grid-template-areas:
+      'index title arrow'
+      '. description arrow';
+    gap: 4px 10px;
+    padding: 14px 4px;
   }
 
-  .rowDescription {
-    display: none;
+  .rowIndex {
+    grid-area: index;
   }
 
   .rowTitle {
-    font-size: 22px;
+    grid-area: title;
+    font-size: 26px;
+  }
+
+  .rowDescription {
+    display: block;
+    grid-area: description;
+    font-size: 14px;
+  }
+
+  .rowArrow {
+    grid-area: arrow;
+    align-self: center;
   }
 
   .eventRow {
