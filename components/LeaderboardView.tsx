@@ -685,51 +685,17 @@ export default function LeaderboardView({
           </div>
         </div>
       ) : (
-        <div
-          style={{
-            padding: 40,
-            textAlign: 'center',
-            backgroundColor: '#FFFFFF',
-            border: '2px solid #111',
-            borderRadius: 4,
-            boxShadow: '3px 3px 0 #111',
-          }}
-        >
-          <div style={{ fontSize: 44, marginBottom: 8 }}>🏅</div>
-          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>No points recorded yet</h3>
-          <p style={{ margin: '6px 0 16px 0', fontSize: 14, color: '#555', maxWidth: 460, marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="empty leaderboard-empty">
+          <h3>No points recorded yet</h3>
+          <p>
             Be the first to register for an event, upload a project, or answer questions in the community to claim the #1 spot on campus!
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
-            <Link
-              href="/events"
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#2B50FF',
-                color: '#fff',
-                border: '2px solid #111',
-                borderRadius: 4,
-                fontWeight: 800,
-                fontSize: 13,
-                textDecoration: 'none',
-              }}
-            >
-              Browse Events →
+          <div className="btn-row">
+            <Link href="/events" className="btn btn--primary">
+              Browse events →
             </Link>
-            <Link
-              href="/projects"
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#fff',
-                color: '#111',
-                border: '2px solid #111',
-                borderRadius: 4,
-                fontWeight: 800,
-                fontSize: 13,
-                textDecoration: 'none',
-              }}
-            >
-              Post a Project →
+            <Link href="/projects" className="btn btn--outline">
+              Post a project →
             </Link>
           </div>
         </div>

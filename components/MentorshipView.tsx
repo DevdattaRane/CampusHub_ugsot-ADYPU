@@ -499,7 +499,7 @@ export default function MentorshipView({
           <div className="card" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }}>
             <h2 style={{ margin: 0, fontSize: 18 }}>Sessions You Booked ({sessions.asMentee.length})</h2>
             {sessions.asMentee.length === 0 ? (
-              <p style={{ margin: 0, opacity: 0.75, fontSize: 14 }}>You have no booked sessions yet. Pick a mentor above to schedule one!</p>
+              <p className="empty-note">You have no booked sessions yet. Pick a mentor above to schedule one!</p>
             ) : (
               sessions.asMentee.map((sess) => (
                 <div key={sess.id} style={{ padding: 14, border: '1.5px solid var(--ink)', borderRadius: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>

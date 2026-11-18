@@ -366,9 +366,9 @@ export default function ProjectList({ initialProjects, currentUser }: Props) {
 
       {/* Projects Grid */}
       {filteredProjects.length === 0 ? (
-        <Card className="card" style={{ padding: 40, textAlign: 'center' }}>
-          <h3 style={{ margin: '0 0 8px 0' }}>No projects match your filters</h3>
-          <p style={{ margin: 0, opacity: 0.8 }}>Try adjusting your search or clear filters to see all projects.</p>
+        <Card className="empty">
+          <h3>No projects match your filters</h3>
+          <p>Try adjusting your search or clear filters to see all projects.</p>
         </Card>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 18 }}>

@@ -35,6 +35,7 @@ export default function GlobalMotion() {
 
     const progress = document.getElementById('scroll-progress');
     const cursor = document.getElementById('cursor-dot');
+    const header = document.querySelector<HTMLElement>('.topbar');
     const parallaxTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
     const marqueeTracks = Array.from(document.querySelectorAll<HTMLElement>('[data-marquee-track]'));
     const glassCards = Array.from(document.querySelectorAll<HTMLElement>('.lg'));
@@ -44,6 +45,9 @@ export default function GlobalMotion() {
     let speed = 1;
     let marqueeOffset = 0;
     let animationFrame = 0;
+    const updateHeader = () => {
+      header?.classList.toggle('topbar--scrolled', window.scrollY > 8);
+    };
 
     const onPointerMove = (event: PointerEvent) => {
       pointerPosition.targetX = event.clientX;
@@ -134,9 +138,12 @@ export default function GlobalMotion() {
       }
       animationFrame = requestAnimationFrame(animate);
     }
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
 
     return () => {
       observer?.disconnect();
+      window.removeEventListener('scroll', updateHeader);
       cancelAnimationFrame(enterFrame);
       cancelAnimationFrame(animationFrame);
       if (hasFinePointer && cursor) {

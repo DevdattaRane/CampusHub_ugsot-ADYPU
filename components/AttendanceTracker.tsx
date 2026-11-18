@@ -280,13 +280,13 @@ export default function AttendanceTracker({ event, initialRecords }: Props) {
       {/* Registrant Roll-Call List */}
       <section aria-label="Registrants attendance list">
         {totalCount === 0 ? (
-          <div className="card" style={{ padding: 32, textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 8px 0' }}>No registrants yet</h3>
-            <p style={{ margin: 0, opacity: 0.8 }}>Students who register for this event will appear here for roll-call.</p>
+          <div className="empty">
+            <h3>No registrants yet</h3>
+            <p>Students who register for this event will appear here for roll-call.</p>
           </div>
         ) : filteredRecords.length === 0 ? (
-          <div className="card" style={{ padding: 24, textAlign: 'center' }}>
-            <p style={{ margin: 0 }}>No registrants match your search or filter.</p>
+          <div className="empty">
+            <p>No registrants match your search or filter.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

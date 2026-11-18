@@ -467,7 +467,7 @@ export default function ModerationView({ initialReports, initialLogs }: Props) {
               </div>
             ))
           ) : (
-            <div style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+            <div className="empty-note">
               No resolved reports in archive yet.
             </div>
           )}
@@ -516,7 +516,7 @@ export default function ModerationView({ initialReports, initialLogs }: Props) {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={4} style={{ padding: 24, textAlign: 'center', color: '#666' }}>
+                    <td colSpan={4} className="moderation-empty-cell">
                       No moderation actions recorded in audit log yet.
                     </td>
                   </tr>

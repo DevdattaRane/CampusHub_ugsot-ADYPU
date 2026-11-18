@@ -178,14 +178,15 @@ export default function DockersModal({
           ))}
 
           {!loading && list.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '32px 16px', color: '#666', fontSize: 14 }}>
+            <div className="empty-note">
               No {type === 'dockers' ? 'dockers' : 'docking students'} yet.
             </div>
           )}
 
           {loading && (
-            <div style={{ textAlign: 'center', padding: 16, fontSize: 13, color: '#666' }}>
-              Loading...
+            <div className="loading-inline" role="status">
+              <span className="sr-only">Loading...</span>
+              <span className="loading-inline__bar loading-state__bar" aria-hidden="true" />
             </div>
           )}
         </div>

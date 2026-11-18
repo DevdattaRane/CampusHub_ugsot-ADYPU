@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation';
 import GlobalSearchModal from './GlobalSearchModal';
 import IndexMenu from './IndexMenu';
 import ThemeToggle from './ThemeToggle';
-import LiquidLogo from './ui/LiquidLogo';
+import GlassPanel from './effects/GlassPanel';
+import LiquidLogo from './effects/LiquidLogo';
 import type { CurrentUser } from '@/lib/auth';
 
 type Props = {
@@ -62,9 +63,9 @@ export default function NavBar({ currentUser }: Props) {
   return (
     <>
       <header className="topbar">
-        <div className="topbar__inner">
+        <GlassPanel className="topbar__inner">
           <Link href="/" className="logo" aria-label="UGSOT Campus Hub home">
-            <LiquidLogo />
+            <LiquidLogo size={32} allowShader={pathname !== '/profile' && pathname !== '/dev/effects'} />
             <span>UGSOT Campus Hub</span>
           </Link>
           <nav className="topbar-links" aria-label="Featured sections">
@@ -113,7 +114,7 @@ export default function NavBar({ currentUser }: Props) {
               Index
             </button>
           </nav>
-        </div>
+        </GlassPanel>
       </header>
       <IndexMenu open={indexOpen} currentUser={currentUser ?? null} onClose={() => setOpenIndexPath(null)} />
       <GlobalSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />

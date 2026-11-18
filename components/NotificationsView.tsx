@@ -96,74 +96,35 @@ export default function NotificationsView({
   };
 
   return (
-    <div style={{ maxWidth: 760, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
-      {/* Top Controls Bar */}
-      <div
-        className="card"
-        style={{
-          padding: '16px 20px',
-          border: '2px solid #111',
-          borderRadius: 4,
-          backgroundColor: '#FFFFFF',
-          boxShadow: '3px 3px 0 #111',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+    <div className="notifications-view">
+      <div className="notifications-toolbar">
+        <div className="notifications-toolbar__filters" role="group" aria-label="Filter notifications">
           <button
             type="button"
+            className="pill r sm"
+            aria-pressed={filter === 'all'}
             onClick={() => setFilter('all')}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 4,
-              border: '1.5px solid #111',
-              fontWeight: 800,
-              fontSize: 13,
-              cursor: 'pointer',
-              backgroundColor: filter === 'all' ? '#111' : '#F6F1E7',
-              color: filter === 'all' ? '#FFF' : '#111',
-            }}
           >
             All ({notifications.length})
           </button>
 
           <button
             type="button"
+            className="pill r sm"
+            aria-pressed={filter === 'unread'}
             onClick={() => setFilter('unread')}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 4,
-              border: '1.5px solid #111',
-              fontWeight: 800,
-              fontSize: 13,
-              cursor: 'pointer',
-              backgroundColor: filter === 'unread' ? '#FFE14D' : '#F6F1E7',
-              color: '#111',
-            }}
           >
             Unread ({unreadCount})
           </button>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div className="notifications-toolbar__actions">
           {unreadCount > 0 && (
             <button
               type="button"
+              className="pill r sm"
               onClick={handleMarkAllRead}
               disabled={markingAll}
-              style={{
-                padding: '6px 12px',
-                backgroundColor: '#fff',
-                border: '1.5px solid #111',
-                borderRadius: 4,
-                fontSize: 12,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
             >
               {markingAll ? 'Marking...' : 'Mark all read'}
             </button>
@@ -171,107 +132,85 @@ export default function NotificationsView({
 
           <button
             type="button"
+            className="pill r sm"
+            aria-pressed={showPrefs}
             onClick={() => setShowPrefs((prev) => !prev)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: showPrefs ? '#2B50FF' : '#fff',
-              color: showPrefs ? '#fff' : '#111',
-              border: '1.5px solid #111',
-              borderRadius: 4,
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
           >
-            ⚙️ Preferences
+            Preferences
           </button>
         </div>
       </div>
 
-      {/* Preferences Drawer / Accordion */}
       {showPrefs && (
-        <div
-          className="card"
-          style={{
-            padding: 20,
-            border: '2px solid #111',
-            borderRadius: 4,
-            backgroundColor: '#FAF8F5',
-            boxShadow: '3px 3px 0 #111',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 14,
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 900 }}>Notification Preferences</h3>
-            {savingPrefs && <span style={{ fontSize: 11, fontWeight: 700, color: '#666' }}>Saving...</span>}
+        <section className="notification-preferences" aria-labelledby="notification-preferences-title">
+          <div className="notification-preferences__head">
+            <h2 id="notification-preferences-title">Notification preferences</h2>
+            {savingPrefs && <span className="mono" role="status">Saving...</span>}
           </div>
-          <p style={{ margin: 0, fontSize: 13, color: '#555' }}>
+          <p className="notification-preferences__copy">
             Choose which in-app updates you receive and configure optional email alerts.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          <div className="notification-preferences__grid">
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.notifyTeamInvites}
                 onChange={() => handleTogglePref('notifyTeamInvites')}
               />
-              🚀 Hackathon Team Invites
+              Hackathon team invites
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.notifyEventUpdates}
                 onChange={() => handleTogglePref('notifyEventUpdates')}
               />
-              🎟️ Event & Waitlist Updates
+              Event and waitlist updates
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.notifyMentorship}
                 onChange={() => handleTogglePref('notifyMentorship')}
               />
-              🤝 Mentorship & Code Reviews
+              Mentorship and code reviews
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.notifyForum}
                 onChange={() => handleTogglePref('notifyForum')}
               />
-              💬 Community Answers & Accepts
+              Community answers and accepts
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.notifyProjects}
                 onChange={() => handleTogglePref('notifyProjects')}
               />
-              💻 Project Comments & Likes
+              Project comments and likes
             </label>
 
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            <label className="notification-preferences__option">
               <input
                 type="checkbox"
                 checked={preferences.emailNotifications}
                 onChange={() => handleTogglePref('emailNotifications')}
               />
-              ✉️ Email Notifications (Important Only)
+              Email notifications (important only)
             </label>
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Notifications List */}
       {displayedNotifications.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="notification-list" aria-live="polite">
           {displayedNotifications.map((n) => {
             const icon = TYPE_ICONS[n.type] || '🔔';
             const formattedTime = new Date(n.createdAt).toLocaleDateString('en-US', {
@@ -284,52 +223,27 @@ export default function NotificationsView({
             return (
               <div
                 key={n.id}
-                className="card"
-                style={{
-                  padding: '16px 18px',
-                  border: '2px solid #111',
-                  borderRadius: 4,
-                  backgroundColor: n.isRead ? '#FFFFFF' : '#FEF9C3',
-                  boxShadow: '2px 2px 0 #111',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  gap: 14,
-                  transition: 'background 0.15s ease',
-                }}
+                className={`notification-item${n.isRead ? '' : ' notification-item--unread'}`}
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <span style={{ fontSize: 24, lineHeight: 1 }}>{icon}</span>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontWeight: 800, fontSize: 15, color: '#111' }}>{n.title}</span>
+                <div className="notification-item__body">
+                  <span className="notification-item__icon" aria-hidden="true">{icon}</span>
+                  <div className="notification-item__copy">
+                    <div className="notification-item__heading">
+                      <span className="notification-item__title">{n.title}</span>
                       {!n.isRead && (
-                        <span
-                          style={{
-                            fontSize: 10,
-                            fontWeight: 800,
-                            backgroundColor: '#FFE14D',
-                            padding: '2px 6px',
-                            borderRadius: 3,
-                            border: '1px solid #111',
-                          }}
-                        >
-                          NEW
-                        </span>
+                        <span className="notification-item__new">New</span>
                       )}
                     </div>
-                    <p style={{ margin: '4px 0 6px 0', fontSize: 13, color: '#333', lineHeight: 1.45 }}>
-                      {n.message}
-                    </p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <span style={{ fontSize: 11, color: '#777' }}>{formattedTime}</span>
+                    <p className="notification-item__message">{n.message}</p>
+                    <div className="notification-item__meta">
+                      <span className="mono">{formattedTime}</span>
                       {n.link && (
                         <Link
                           href={n.link}
                           onClick={() => {
                             if (!n.isRead) handleMarkRead(n.id);
                           }}
-                          style={{ fontSize: 12, fontWeight: 700, color: '#2B50FF', textDecoration: 'underline' }}
+                          className="notification-item__link"
                         >
                           View Details →
                         </Link>
@@ -343,14 +257,7 @@ export default function NotificationsView({
                     type="button"
                     onClick={() => handleMarkRead(n.id)}
                     title="Mark as read"
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      fontSize: 16,
-                      cursor: 'pointer',
-                      padding: 4,
-                      color: '#666',
-                    }}
+                    className="notification-item__mark-read"
                   >
                     ✓
                   </button>
@@ -361,19 +268,11 @@ export default function NotificationsView({
         </div>
       ) : (
         <div
-          className="card"
-          style={{
-            padding: 48,
-            textAlign: 'center',
-            border: '2px solid #111',
-            borderRadius: 4,
-            backgroundColor: '#FFFFFF',
-            boxShadow: '3px 3px 0 #111',
-          }}
+          className="notification-empty empty"
+          role="status"
         >
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🎉</div>
-          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>You are all caught up!</h3>
-          <p style={{ margin: '6px 0 0 0', fontSize: 14, color: '#666' }}>
+          <h2>You are all caught up</h2>
+          <p>
             No {filter === 'unread' ? 'unread' : ''} notifications at the moment.
           </p>
         </div>

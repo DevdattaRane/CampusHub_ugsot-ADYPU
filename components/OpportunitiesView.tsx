@@ -299,20 +299,11 @@ export default function OpportunitiesView({ initialOpportunities, currentUser }:
       {/* Opportunities List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {filtered.length === 0 ? (
-          <div
-            style={{
-              padding: 40,
-              textAlign: 'center',
-              border: '2px dashed #1a1a1a',
-              borderRadius: 4,
-              backgroundColor: '#fff',
-            }}
-          >
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🎯</div>
-            <h3 style={{ margin: '0 0 6px 0', fontSize: 18, fontWeight: 700 }}>
+          <div className="empty">
+            <h3>
               No matching opportunities found
             </h3>
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
+            <p>
               Try clearing your search query or selecting a different category.
             </p>
           </div>

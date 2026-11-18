@@ -17,6 +17,7 @@ import Tag from './ui/Tag';
 import DashboardTab from './DashboardTab';
 import ForkButton from './ForkButton';
 import DockersModal from './DockersModal';
+import ShaderBackground from './effects/ShaderBackground';
 
 const LINK_LABELS: { key: keyof Student['links']; label: string }[] = [
   { key: 'linkedin', label: 'LinkedIn' },
@@ -183,6 +184,7 @@ export default function ProfileView({
     <div className="profile-layout">
       <section aria-label="Profile card" className="profile-card">
         <div aria-hidden="true" className="profile-card__banner">
+          <ShaderBackground variant="mesh" className="profile-card__banner-shader" />
           <span />
           <span />
           <span />
