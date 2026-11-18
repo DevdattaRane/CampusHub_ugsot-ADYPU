@@ -13,6 +13,7 @@ const LiquidMetalLayer = dynamic(() => import('./LiquidMetalLayer'), {
 
 type Props = {
   size?: number;
+  allowShader?: boolean;
 };
 
 function StaticLogo({ size }: Props) {
@@ -24,11 +25,12 @@ function StaticLogo({ size }: Props) {
   );
 }
 
-export default function LiquidLogo({ size = 48 }: Props) {
+export default function LiquidLogo({ size = 48, allowShader = true }: Props) {
   const { ref, isInView } = useInView<HTMLSpanElement>();
   const reducedMotion = useReducedMotion();
   const capabilities = useShaderCapabilities();
-  const isActive = capabilities.ready
+  const isActive = allowShader
+    && capabilities.ready
     && capabilities.supportsWebGL2
     && !capabilities.isSmallScreen
     && !reducedMotion

@@ -11,11 +11,15 @@ import Tag from '@/components/ui/Tag';
 import FeatureSuggestions from '@/components/FeatureSuggestions';
 import { getEventRegistrationStatuses, type EventRegistrationStatus } from '@/lib/db/events';
 import { getCommunityPosts } from '@/lib/db/community';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Home · CampusHub · UGSOT' };
 
 export default async function HomePage() {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect('/welcome');
+
   const today = todayISO();
   const todayDate = new Date(`${today}T00:00:00`);
   const daysUntilSunday = (7 - todayDate.getDay()) % 7;
@@ -37,7 +41,6 @@ export default async function HomePage() {
   } catch {
     latestPosts = [];
   }
-  const currentUser = await getCurrentUser();
   const firstName = currentUser?.name.split(' ')[0] ?? 'there';
   let registrationStatuses: EventRegistrationStatus[] = [];
   let registrationUnavailable = false;

@@ -63,7 +63,8 @@ export default function IntroScreen({ signedIn = false }: { signedIn?: boolean }
 
   useLayoutEffect(() => {
     const app = document.getElementById('app-content');
-    if (!open && pathname !== '/intro') {
+    const showIntro = pathname === '/intro' || (!signedIn && pathname !== '/welcome' && open);
+    if (!showIntro) {
       app?.removeAttribute('aria-hidden');
       if (app) app.inert = false;
       app?.focus({ preventScroll: true });
@@ -112,10 +113,11 @@ export default function IntroScreen({ signedIn = false }: { signedIn?: boolean }
         else app.setAttribute('aria-hidden', previousAriaHidden);
       }
     };
-  }, [close, open, pathname]);
+  }, [close, open, pathname, signedIn]);
 
   const isIntroRoute = pathname === '/intro';
-  if ((signedIn && !isIntroRoute) || (!isIntroRoute && !open)) return null;
+  const showIntro = isIntroRoute || (!signedIn && pathname !== '/welcome' && open);
+  if (!showIntro) return null;
 
   const classNames = [
     'intro-screen',
