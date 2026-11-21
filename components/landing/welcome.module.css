@@ -6,6 +6,32 @@
   color: var(--ink);
 }
 
+.skipLink {
+  position: fixed;
+  z-index: 110;
+  top: 12px;
+  left: clamp(16px, 5vw, 72px);
+  padding: 11px 16px;
+  transform: translateY(calc(-100% - 20px));
+  border: 1px solid var(--canvas);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 160ms ease;
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
+}
+
+.skipLink:hover {
+  background: var(--electric-blue);
+  color: #fff;
+}
+
 :global(.site-layout--landing) {
   display: block;
   max-width: none;
@@ -1192,6 +1218,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .header,
+  .skipLink,
   .navRoll > span,
   .navigation a,
   .signIn,

@@ -138,3 +138,22 @@
 - Targeted ESLint and `git diff --check` passed.
 - `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
 - `/welcome` returned HTTP 200. Browser checks confirmed showcase cards reveal on scroll on desktop, stay visible with reduced motion and at mobile width, the glass surfaces render, and both event teasers are labelled sample data. No browser runtime errors appeared.
+
+## Phase 6 — Accessibility and final pass
+
+### Done
+
+- Added a keyboard-first skip link that moves focus to the landing page’s main content.
+- Kept the optional mascot out because the project has no existing mascot artwork; no new visual asset was needed.
+- Completed the landing page’s responsive and reduced-motion review without adding dependencies or changing backend behavior.
+
+### Known issues
+
+- Event teasers and Noticeboard entries remain illustrative sample data because no verified campus schedule or achievements source is available.
+- The project-wide type-check still has the existing errors under `refrence-repos/`.
+
+### Phase 6 validation
+
+- Targeted ESLint and `git diff --check` passed.
+- `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
+- `/welcome` returned HTTP 200. Browser checks at 390, 768, 1024, and 1440 viewport settings found no horizontal overflow. Keyboard testing confirmed the skip link is first and moves focus to main. Reduced-motion testing confirmed the shader and pinning are disabled while showcase cards remain visible. No page runtime errors appeared after reload; Next.js still emits its existing development font-preload warnings.

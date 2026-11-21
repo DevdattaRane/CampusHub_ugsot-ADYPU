@@ -70,8 +70,9 @@ export default function WelcomeExperience() {
     <SmoothScroll>
       <div className={styles.welcomePage}>
         <Grain />
+        <a className={styles.skipLink} href="#landing-main">Skip to main content</a>
         <Nav />
-        <main>
+        <main id="landing-main" tabIndex={-1}>
         <section className={styles.hero} aria-labelledby="welcome-title" data-nav-theme="light">
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}><span /> UGSOT · ADYPU</p>
