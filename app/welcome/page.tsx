@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import WelcomeExperience, { type WelcomeEvent } from '@/components/landing/WelcomeExperience';
+import WelcomeExperience from '@/components/landing/WelcomeExperience';
 
 export const metadata: Metadata = {
   title: 'Welcome · CampusHub · UGSOT',
@@ -7,7 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function WelcomePage() {
-  // The current event array is documented as sample data, so don't present it as live.
-  const upcomingEvents: WelcomeEvent[] = [];
-  return <WelcomeExperience upcomingEvents={upcomingEvents} />;
+  return <WelcomeExperience />;
 }

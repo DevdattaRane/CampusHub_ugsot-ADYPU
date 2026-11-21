@@ -1,298 +1,203 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import GlassPanel from '@/components/effects/GlassPanel';
-import LiquidLogo from '@/components/effects/LiquidLogo';
-import ShaderBackground from '@/components/effects/ShaderBackground';
-import { formatShort, MONTHS_SHORT, parseDate } from '@/lib/dates';
-import type { CampusEvent } from '@/lib/types';
+import Grain from './Grain';
+import LiveClock from './LiveClock';
+import LogoMark from './LogoMark';
+import Nav from './Nav';
 import styles from './welcome.module.css';
-
-export type WelcomeEvent = Pick<CampusEvent, 'id' | 'title' | 'start' | 'end' | 'category' | 'place'>;
 
 const destinations = [
   {
-    href: '/projects',
-    title: 'Projects',
-    description: 'Explore what students are building and share your own work.',
-  },
-  {
-    href: '/events',
-    title: 'Events',
-    description: 'Find workshops, meetups, sprints and campus events.',
-  },
-  {
-    href: '/community',
-    title: 'Community',
-    description: 'Ask questions, trade ideas and help each other move forward.',
-  },
-  {
-    href: '/students',
-    title: 'Students',
-    description: 'Meet people by interests, skills and what they want to learn.',
-  },
-  {
+    number: '01',
     href: '/opportunities',
-    title: 'Opportunities',
-    description: 'Browse ways to contribute, collaborate and grow.',
+    label: 'Opportunities',
+    description: 'Find internships, open-source programs, hackathons and more.',
   },
   {
+    number: '02',
     href: '/leaderboard',
-    title: 'Leaderboard',
+    label: 'Leaderboard',
     description: 'See community contributions and helpful answers.',
   },
-];
-
-const projectPrompts = [
   {
-    className: styles.projectBlue,
-    title: 'Make a start',
-    description: 'Bring a first draft, a question or a rough idea.',
-  },
-  {
-    className: styles.projectInk,
-    title: 'Build with others',
-    description: 'Find people to shape an idea into something useful.',
-  },
-  {
-    className: styles.projectMint,
-    title: 'Share what you learn',
-    description: 'Show your work and make progress visible.',
+    number: '03',
+    href: '/events',
+    label: 'Events',
+    description: 'Explore workshops, meetups, sprints and campus events.',
   },
 ];
 
-function LandingHeader() {
-  const [scrolled, setScrolled] = useState(false);
+const showcases = [
+  {
+    number: '01',
+    href: '/opportunities',
+    eyebrow: 'Find a next step',
+    title: 'Opportunities',
+    description: 'Browse internships, open-source programs, hackathons, fellowships and competitions.',
+    details: ['Internships', 'Open source', 'Hackathons'],
+    theme: styles.showcaseBlue,
+  },
+  {
+    number: '02',
+    href: '/community',
+    eyebrow: 'Learn together',
+    title: 'Community',
+    description: 'Ask questions, share discussions and find answers from other students.',
+    details: ['Questions', 'Discussions', 'Announcements'],
+    theme: styles.showcaseInk,
+  },
+  {
+    number: '03',
+    href: '/projects',
+    eyebrow: 'Make work visible',
+    title: 'Projects',
+    description: 'Show what you are building, explore project work and find collaborators.',
+    details: ['Project showcase', 'GitHub links', 'Collaboration'],
+    theme: styles.showcaseMint,
+  },
+];
 
-  useEffect(() => {
-    const updateScroll = () => setScrolled(window.scrollY > 12);
-    updateScroll();
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    return () => window.removeEventListener('scroll', updateScroll);
-  }, []);
-
-  const content = (
-    <>
-      <Link href="/welcome" className={styles.brand} aria-label="UGSOT Campus Hub welcome page">
-        <LiquidLogo size={34} allowShader={false} />
-        <span>UGSOT Campus Hub</span>
-      </Link>
-      <nav className={styles.navigation} aria-label="Explore CampusHub">
-        <Link href="/projects">Projects</Link>
-        <Link href="/events">Events</Link>
-        <Link href="/community">Community</Link>
-        <Link href="/students">Students</Link>
-      </nav>
-      <div className={styles.headerActions}>
-        <Link href="/auth/sign-in" className={styles.signIn}>Sign in</Link>
-        <Link href="/auth/register" className={`pill r magnetic ${styles.joinButton}`} data-magnetic>
-          Join the Hub
-        </Link>
-      </div>
-    </>
-  );
-
-  return (
-    <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
-      {scrolled
-        ? <GlassPanel className={styles.headerInner}>{content}</GlassPanel>
-        : <div className={styles.headerInner}>{content}</div>}
-    </header>
-  );
-}
-
-function SectionHeading({ id, title, note }: { id: string; title: string; note?: string }) {
-  return (
-    <div className={`sh ${styles.sectionHeading}`}>
-      <h2 id={id} className={styles.maskTitle} data-reveal suppressHydrationWarning>
-        <span>{title}</span>
-      </h2>
-      {note && <p className={styles.sectionNote}>{note}</p>}
-    </div>
-  );
-}
-
-function EventDate({ event }: { event: WelcomeEvent }) {
-  const date = parseDate(event.start);
-  return (
-    <time className={styles.eventDate} dateTime={event.start}>
-      <span className="num" data-parallax="0.02" suppressHydrationWarning>
-        {event.end ? `${date.getDate()}–${parseDate(event.end).getDate()}` : date.getDate()}
-      </span>
-      <span className={styles.eventMonth}>{MONTHS_SHORT[date.getMonth()]}</span>
-      <span className="sr-only">{formatShort(event.start)}</span>
-    </time>
-  );
-}
-
-export default function WelcomeExperience({ upcomingEvents }: { upcomingEvents: WelcomeEvent[] }) {
-  const nextEvent = upcomingEvents[0];
-
+export default function WelcomeExperience() {
   return (
     <div className={styles.welcomePage}>
-      <LandingHeader />
+      <Grain />
+      <Nav />
       <main>
         <section className={styles.hero} aria-labelledby="welcome-title">
-          <div className={styles.heroCopy} data-reveal suppressHydrationWarning>
-            <p className={styles.kicker}>A place to learn, build and share</p>
-            <h1 id="welcome-title">Build. Connect. Collaborate. Grow.</h1>
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}><span /> UGSOT · ADYPU</p>
+            <h1 id="welcome-title">Build your next idea <span>here.</span></h1>
             <p className={styles.heroDescription}>
-              Find your people, discover campus events and bring your next idea to life with UGSOT.
+              Find opportunities, meet collaborators and grow your work with the UGSOT community.
             </p>
             <div className={styles.heroActions}>
-              <Link href="/auth/register" className="pill r magnetic" data-magnetic>Join the Hub</Link>
-              <Link href="/projects" className="pill magnetic" data-magnetic>Explore projects</Link>
+              <Link href="/auth/sign-in" className={styles.primaryButton}>Sign in <span aria-hidden="true">↗</span></Link>
+              <Link href="/opportunities" className={styles.secondaryButton}>Browse opportunities</Link>
             </div>
+            <LiveClock />
           </div>
 
-          <div className={styles.heroVisual} data-reveal suppressHydrationWarning>
-            <ShaderBackground className={styles.heroShader}>
-              <span className={`${styles.blob} ${styles.blobBlue}`} aria-hidden="true" />
-              <span className={`${styles.blob} ${styles.blobCoral}`} aria-hidden="true" />
-              <span className={`${styles.blob} ${styles.blobMint}`} aria-hidden="true" />
-              <div className={styles.heroLogo} data-parallax="0.025" aria-hidden="true" suppressHydrationWarning>
-                <LiquidLogo size={190} allowShader={false} />
-              </div>
-              <GlassPanel
-                className={styles.nextCard}
-                role="group"
-                aria-labelledby="next-up-title"
-              >
-                <p className={styles.cardEyebrow}>
-                  {nextEvent ? `Next up · ${formatShort(nextEvent.start)}` : 'Next up'}
-                </p>
-                <h2 id="next-up-title">{nextEvent?.title ?? 'Event preview unavailable'}</h2>
-                <p className={styles.nextMeta}>
-                  {nextEvent
-                    ? `${nextEvent.place} · ${nextEvent.category}`
-                    : 'Verified upcoming event details will appear here when available.'}
-                </p>
-                <Link
-                  href={nextEvent ? `/events/${nextEvent.id}` : '/events'}
-                  className={`pill sm ${styles.cardLink}`}
-                >
-                  {nextEvent ? 'View event' : 'Explore events'} <span aria-hidden="true">→</span>
-                </Link>
-              </GlassPanel>
-            </ShaderBackground>
+          <div className={styles.heroVisual}>
+            <div className={styles.visualGrid} aria-hidden="true" />
+            <span className={`${styles.orb} ${styles.orbBlue}`} aria-hidden="true" />
+            <span className={`${styles.orb} ${styles.orbCoral}`} aria-hidden="true" />
+            <span className={`${styles.orb} ${styles.orbMint}`} aria-hidden="true" />
+            <div className={styles.visualLogo} aria-hidden="true">
+              <LogoMark large />
+            </div>
+            <div className={styles.visualLabel}>
+              <span>CampusHub</span>
+              <span>Learn · Build · Share</span>
+            </div>
+            <div className={styles.visualCard}>
+              <p>YOUR CAMPUS, CONNECTED</p>
+              <strong>Ideas move further together.</strong>
+              <Link href="/community">Explore the community <span aria-hidden="true">↗</span></Link>
+            </div>
           </div>
         </section>
 
-        <div className={`mq ${styles.ticker}`} aria-hidden="true">
-          <div data-marquee-track aria-hidden="true" suppressHydrationWarning>
-            {Array.from({ length: 8 }, (_, index) => (
-              <span key={index}>Build. Connect. Collaborate. Grow. · </span>
+        <div className={styles.signalBar} aria-label="CampusHub connects students through learning, building and sharing">
+          <span>Learn with others</span>
+          <span aria-hidden="true">✳</span>
+          <span>Build in the open</span>
+          <span aria-hidden="true">✳</span>
+          <span>Share what you know</span>
+        </div>
+
+        <section className={styles.statement} aria-labelledby="statement-title">
+          <div className={styles.statementInner}>
+            <p className={styles.sectionEyebrow}>A campus community for people who make things</p>
+            <h2 id="statement-title">
+              Find your people.<br />
+              <span>Learn by building.</span><br />
+              Make your work count.
+            </h2>
+            <p className={styles.statementCopy}>
+              CampusHub brings UGSOT students together around projects, events, opportunities and shared learning.
+            </p>
+          </div>
+          <span className={styles.statementMark} aria-hidden="true">U</span>
+        </section>
+
+        <section className={styles.section} aria-labelledby="destinations-title">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.sectionEyebrow}>Start anywhere</p>
+              <h2 id="destinations-title">What you can do here</h2>
+            </div>
+            <p>Three ways to take your next step.</p>
+          </div>
+          <div className={styles.destinationGrid}>
+            {destinations.map((destination) => (
+              <Link
+                href={destination.href}
+                className={styles.destinationCard}
+                key={destination.number}
+              >
+                <span className={styles.destinationNumber}>{destination.number}</span>
+                <span className={styles.destinationArrow} aria-hidden="true">↗</span>
+                <span className={styles.destinationLabel}>{destination.label}</span>
+                <span className={styles.destinationDescription}>{destination.description}</span>
+              </Link>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className={styles.content}>
-          <section className={styles.section} aria-labelledby="explore-title">
-            <SectionHeading id="explore-title" title="What you can do here" note="Explore the hub" />
-            <div className={styles.destinationRows}>
-              {destinations.map((destination, index) => (
-                <Link
-                  key={destination.href}
-                  href={destination.href}
-                  className={styles.destinationRow}
-                  data-reveal
-                  suppressHydrationWarning
-                >
-                  <span className={styles.rowIndex}>{String(index + 1).padStart(2, '0')}</span>
-                  <span className={styles.rowTitle}>{destination.title}</span>
-                  <span className={styles.rowDescription}>{destination.description}</span>
-                  <span className={styles.rowArrow} aria-hidden="true">↗</span>
-                </Link>
-              ))}
+        <section className={`${styles.section} ${styles.showcaseSection}`} aria-labelledby="showcase-title">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.sectionEyebrow}>A closer look</p>
+              <h2 id="showcase-title">A hub for your next move</h2>
             </div>
-          </section>
-
-          <section className={styles.section} aria-labelledby="events-title">
-            <SectionHeading id="events-title" title="Happening soon" note="Events on campus" />
-            {upcomingEvents.length ? (
-              <div className={styles.eventList}>
-                {upcomingEvents.map((event) => (
-                  <Link
-                    key={event.id}
-                    href={`/events/${event.id}`}
-                    className={styles.eventRow}
-                    data-reveal
-                    suppressHydrationWarning
-                  >
-                    <EventDate event={event} />
-                    <span className={styles.eventCopy}>
-                      <strong>{event.title}</strong>
-                      <span>{event.place}</span>
-                    </span>
-                    <span className={styles.eventCategory}>{event.category}</span>
-                    <span className={styles.rowArrow} aria-hidden="true">↗</span>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <p className={styles.emptyNote}>Verified upcoming event listings are not available to preview yet.</p>
-            )}
-          </section>
-
-          <section className={styles.section} aria-labelledby="projects-title">
-            <SectionHeading
-              id="projects-title"
-              title="Built by students"
-              note="Project spotlights will appear here when curated project data is available."
-            />
-            <div className={styles.projectTiles}>
-              {projectPrompts.map((prompt) => (
-                <Link
-                  key={prompt.title}
-                  href="/projects"
-                  className={`${styles.projectTile} ${prompt.className}`}
-                  data-reveal
-                  suppressHydrationWarning
-                >
-                  <span className={styles.tileMark} aria-hidden="true">{prompt.title[0]}</span>
-                  <span>
-                    <strong>{prompt.title}</strong>
-                    <span>{prompt.description}</span>
+            <p>Explore the spaces that help campus ideas move forward.</p>
+          </div>
+          <div className={styles.showcaseGrid}>
+            {showcases.map((showcase) => (
+              <Link
+                href={showcase.href}
+                className={`${styles.showcaseCard} ${showcase.theme}`}
+                key={showcase.number}
+              >
+                <span className={styles.showcaseTopline}>
+                  <span>{showcase.eyebrow}</span>
+                  <span>{showcase.number}</span>
+                </span>
+                <span className={styles.showcasePreview} aria-hidden="true">
+                  <span className={styles.previewTitle}>{showcase.title}</span>
+                  <span className={styles.previewDetails}>
+                    {showcase.details.map((detail) => <span key={detail}>{detail}</span>)}
                   </span>
-                </Link>
-              ))}
-            </div>
-          </section>
+                </span>
+                <span className={styles.showcaseCopy}>
+                  <strong>{showcase.title}</strong>
+                  <span>{showcase.description}</span>
+                </span>
+                <span className={styles.showcaseArrow} aria-hidden="true">↗</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-          <section className={styles.section} aria-labelledby="steps-title">
-            <SectionHeading id="steps-title" title="How it works" note="Three simple steps" />
-            <div className={styles.steps}>
-              <article className={styles.step} data-reveal suppressHydrationWarning>
-                <span>01</span>
-                <h3>Join</h3>
-                <p>Create an account and become part of the UGSOT community.</p>
-              </article>
-              <article className={styles.step} data-reveal suppressHydrationWarning>
-                <span>02</span>
-                <h3>Build a profile</h3>
-                <p>Share what you are learning and the kind of work you want to do.</p>
-              </article>
-              <article className={styles.step} data-reveal suppressHydrationWarning>
-                <span>03</span>
-                <h3>Find your people</h3>
-                <p>Meet collaborators, join events and contribute to campus projects.</p>
-              </article>
-            </div>
-          </section>
-        </div>
+        <section className={styles.noticeboard} aria-labelledby="noticeboard-title">
+          <div>
+            <p className={styles.sectionEyebrow}>This month on campus</p>
+            <h2 id="noticeboard-title">Keep up with what’s happening.</h2>
+            <p>
+              No verified campus events are available to preview yet. The Noticeboard will bring event and achievement updates together.
+            </p>
+          </div>
+          <Link href="/noticeboard" className={styles.noticeboardLink}>
+            View noticeboard <span aria-hidden="true">↗</span>
+          </Link>
+        </section>
 
-        <section className={styles.finalCta} aria-labelledby="final-cta-title">
-          <ShaderBackground variant="grain" className={styles.finalShader}>
-            <div className={styles.finalContent} data-reveal suppressHydrationWarning>
-              <p className={styles.kicker}>Your next idea can start here</p>
-              <h2 id="final-cta-title">Make something that brings people together.</h2>
-              <div className={styles.heroActions}>
-                <Link href="/auth/register" className="pill r magnetic" data-magnetic>Join the Hub</Link>
-                <Link href="/auth/sign-in" className="pill magnetic" data-magnetic>Sign in</Link>
-              </div>
-            </div>
-          </ShaderBackground>
+        <section className={styles.closing} aria-labelledby="closing-title">
+          <p className={styles.sectionEyebrow}>Your next idea can start here</p>
+          <h2 id="closing-title">Make something that brings people together.</h2>
+          <div className={styles.closingActions}>
+            <Link href="/auth/sign-in" className={styles.primaryButton}>Sign in <span aria-hidden="true">↗</span></Link>
+            <LiveClock />
+          </div>
         </section>
       </main>
     </div>
