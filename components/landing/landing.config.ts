@@ -19,5 +19,8 @@ export const LANDING_CONFIG = {
     wordStaggerSeconds: 0.025, // Reveal statement words in a restrained sequence.
     parallaxMaxPercent: 10, // Limit parallax travel to less than the 15% maximum.
     pinAnticipation: 1, // Reduce the visual jump when the pinned section begins.
+    showcaseRevealOffsetPx: 28, // Keep product-card entrances subtle.
+    showcaseRevealDurationSeconds: 0.7, // Avoid a long delay before the cards are usable.
+    showcaseRevealStaggerSeconds: 0.11, // Give each product card a brief moment of focus.
   },
 } as const;

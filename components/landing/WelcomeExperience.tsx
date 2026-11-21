@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { noticeboardEventSamples } from '@/data/noticeboard.sample';
 import Grain from './Grain';
 import HeroFluid from './HeroFluid';
 import LiveClock from './LiveClock';
@@ -61,6 +62,8 @@ const showcases = [
     theme: styles.showcaseMint,
   },
 ];
+
+const landingEventTeasers = noticeboardEventSamples.slice(0, 2);
 
 export default function WelcomeExperience() {
   return (
@@ -159,6 +162,7 @@ export default function WelcomeExperience() {
           className={`${styles.section} ${styles.showcaseSection}`}
           aria-labelledby="showcase-title"
           data-nav-theme="light"
+          data-showcase-section
         >
           <div className={styles.sectionHeading}>
             <div>
@@ -172,6 +176,7 @@ export default function WelcomeExperience() {
               <Link
                 href={showcase.href}
                 className={`${styles.showcaseCard} ${showcase.theme}`}
+                data-showcase-card
                 key={showcase.number}
               >
                 <span className={styles.showcaseTopline}>
@@ -195,16 +200,32 @@ export default function WelcomeExperience() {
         </section>
 
         <section className={styles.noticeboard} aria-labelledby="noticeboard-title" data-nav-theme="light">
-          <div>
-            <p className={styles.sectionEyebrow}>This month on campus</p>
+          <div className={styles.noticeboardIntro}>
+            <p className={`${styles.sectionEyebrow} ${styles.noticeboardEyebrow}`}>
+              Campus calendar <span className={styles.noticeboardSample}>SAMPLE PREVIEW</span>
+            </p>
             <h2 id="noticeboard-title">Keep up with what’s happening.</h2>
             <p>
-              No verified campus events are available to preview yet. The Noticeboard will bring event and achievement updates together.
+              These illustrative teasers use sample event details. Verified dates and locations are not connected yet.
             </p>
           </div>
-          <Link href="/noticeboard" className={styles.noticeboardLink}>
-            View noticeboard <span aria-hidden="true">↗</span>
-          </Link>
+          <div className={styles.noticeboardEvents}>
+            {landingEventTeasers.map((event) => (
+              <article className={styles.noticeboardEvent} key={event.id}>
+                <div className={styles.noticeboardEventCopy}>
+                  <p>{event.category}</p>
+                  <h3>{event.title}</h3>
+                </div>
+                <div className={styles.noticeboardEventMeta}>
+                  <span className={styles.noticeboardSample}>SAMPLE</span>
+                  <span>{event.when}</span>
+                </div>
+              </article>
+            ))}
+            <Link href="/noticeboard" className={styles.noticeboardLink}>
+              View sample updates <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
         </section>
 
         <section className={styles.closing} aria-labelledby="closing-title" data-nav-theme="dark">

@@ -23,6 +23,8 @@ export default function ScrollEffects() {
     const navSections = gsap.utils.toArray<HTMLElement>('[data-nav-theme]');
     const parallaxTargets = gsap.utils.toArray<HTMLElement>('[data-parallax]');
     const statement = document.querySelector<HTMLElement>('[data-pinned-statement]');
+    const showcaseSection = document.querySelector<HTMLElement>('[data-showcase-section]');
+    const showcaseCards = gsap.utils.toArray<HTMLElement>('[data-showcase-card]');
     const tasks: TriggerTask[] = [
       ...navSections.map((element) => ({ element, type: 'nav' as const })),
       ...parallaxTargets.map((element) => ({ element, type: 'parallax' as const })),
@@ -105,6 +107,25 @@ export default function ScrollEffects() {
             },
           });
         });
+
+        if (motionQuery.matches && showcaseSection && showcaseCards.length) {
+          gsap.fromTo(
+            showcaseCards,
+            { autoAlpha: 0, y: LANDING_CONFIG.motion.showcaseRevealOffsetPx },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: LANDING_CONFIG.motion.showcaseRevealDurationSeconds,
+              stagger: LANDING_CONFIG.motion.showcaseRevealStaggerSeconds,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: showcaseSection,
+                start: 'top 82%',
+                once: true,
+              },
+            },
+          );
+        }
       });
       ScrollTrigger.refresh();
     };

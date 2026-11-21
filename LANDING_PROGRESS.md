@@ -116,3 +116,25 @@
 - Targeted ESLint and `git diff --check` passed.
 - `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
 - `/noticeboard` returned HTTP 200 without authentication. Browser checks confirmed the landing-page link opens it, the shared app navigation/rail/footer are absent, all sample cards are labelled, and desktop/mobile layouts have no horizontal overflow. No browser runtime errors appeared after reload.
+
+## Phase 5 — Showcase and event teaser
+
+### Done
+
+- Added a restrained, staggered GSAP reveal to the product showcase cards. It runs only for desktop fine-pointer layouts with reduced motion disabled; other layouts keep the cards visible and static.
+- Refined the showcase preview surfaces with theme-aware translucent glass, blur, a highlight, and a solid-color fallback.
+- Reused the Noticeboard’s labelled sample events for two landing-page teasers. The sample status and data limitation are visible beside the entries.
+
+### Remaining
+
+- Phase 6: optional mascot and final accessibility/performance/mobile pass.
+
+### Known issues
+
+- The landing teasers and Noticeboard still use illustrative data; they are not connected to a verified event schedule.
+
+### Phase 5 validation
+
+- Targeted ESLint and `git diff --check` passed.
+- `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
+- `/welcome` returned HTTP 200. Browser checks confirmed showcase cards reveal on scroll on desktop, stay visible with reduced motion and at mobile width, the glass surfaces render, and both event teasers are labelled sample data. No browser runtime errors appeared.
