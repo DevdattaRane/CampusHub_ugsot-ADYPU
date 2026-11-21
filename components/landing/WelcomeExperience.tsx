@@ -3,7 +3,12 @@ import Grain from './Grain';
 import LiveClock from './LiveClock';
 import LogoMark from './LogoMark';
 import Nav from './Nav';
+import ScrollEffects from './ScrollEffects';
+import SmoothScroll from './SmoothScroll';
 import styles from './welcome.module.css';
+
+const statementText = 'CampusHub helps UGSOT students find opportunities, join campus events, learn with peers, and share their projects.';
+const statementWords = statementText.split(' ');
 
 const destinations = [
   {
@@ -58,11 +63,12 @@ const showcases = [
 
 export default function WelcomeExperience() {
   return (
-    <div className={styles.welcomePage}>
-      <Grain />
-      <Nav />
-      <main>
-        <section className={styles.hero} aria-labelledby="welcome-title">
+    <SmoothScroll>
+      <div className={styles.welcomePage}>
+        <Grain />
+        <Nav />
+        <main>
+        <section className={styles.hero} aria-labelledby="welcome-title" data-nav-theme="light">
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}><span /> UGSOT · ADYPU</p>
             <h1 id="welcome-title">Build your next idea <span>here.</span></h1>
@@ -78,10 +84,10 @@ export default function WelcomeExperience() {
 
           <div className={styles.heroVisual}>
             <div className={styles.visualGrid} aria-hidden="true" />
-            <span className={`${styles.orb} ${styles.orbBlue}`} aria-hidden="true" />
-            <span className={`${styles.orb} ${styles.orbCoral}`} aria-hidden="true" />
-            <span className={`${styles.orb} ${styles.orbMint}`} aria-hidden="true" />
-            <div className={styles.visualLogo} aria-hidden="true">
+            <span className={`${styles.orb} ${styles.orbBlue}`} data-parallax aria-hidden="true" />
+            <span className={`${styles.orb} ${styles.orbCoral}`} data-parallax aria-hidden="true" />
+            <span className={`${styles.orb} ${styles.orbMint}`} data-parallax aria-hidden="true" />
+            <div className={styles.visualLogo} data-parallax aria-hidden="true">
               <LogoMark large />
             </div>
             <div className={styles.visualLabel}>
@@ -96,7 +102,7 @@ export default function WelcomeExperience() {
           </div>
         </section>
 
-        <div className={styles.signalBar} aria-label="CampusHub connects students through learning, building and sharing">
+        <div className={styles.signalBar} data-nav-theme="dark" aria-label="CampusHub connects students through learning, building and sharing">
           <span>Learn with others</span>
           <span aria-hidden="true">✳</span>
           <span>Build in the open</span>
@@ -104,22 +110,27 @@ export default function WelcomeExperience() {
           <span>Share what you know</span>
         </div>
 
-        <section className={styles.statement} aria-labelledby="statement-title">
+        <section
+          className={styles.statement}
+          aria-labelledby="statement-title"
+          data-nav-theme="dark"
+          data-pinned-statement
+        >
           <div className={styles.statementInner}>
             <p className={styles.sectionEyebrow}>A campus community for people who make things</p>
-            <h2 id="statement-title">
-              Find your people.<br />
-              <span>Learn by building.</span><br />
-              Make your work count.
-            </h2>
-            <p className={styles.statementCopy}>
-              CampusHub brings UGSOT students together around projects, events, opportunities and shared learning.
+            <h2 id="statement-title">Find your people. Build together.</h2>
+            <p className={styles.statementText} aria-label={statementText}>
+              {statementWords.map((word, index) => (
+                <span key={`${word}-${index}`} data-statement-word aria-hidden="true">
+                  {word}{index < statementWords.length - 1 ? ' ' : ''}
+                </span>
+              ))}
             </p>
           </div>
-          <span className={styles.statementMark} aria-hidden="true">U</span>
+          <span className={styles.statementMark} data-parallax aria-hidden="true">U</span>
         </section>
 
-        <section className={styles.section} aria-labelledby="destinations-title">
+        <section className={styles.section} aria-labelledby="destinations-title" data-nav-theme="light">
           <div className={styles.sectionHeading}>
             <div>
               <p className={styles.sectionEyebrow}>Start anywhere</p>
@@ -143,7 +154,11 @@ export default function WelcomeExperience() {
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.showcaseSection}`} aria-labelledby="showcase-title">
+        <section
+          className={`${styles.section} ${styles.showcaseSection}`}
+          aria-labelledby="showcase-title"
+          data-nav-theme="light"
+        >
           <div className={styles.sectionHeading}>
             <div>
               <p className={styles.sectionEyebrow}>A closer look</p>
@@ -162,7 +177,7 @@ export default function WelcomeExperience() {
                   <span>{showcase.eyebrow}</span>
                   <span>{showcase.number}</span>
                 </span>
-                <span className={styles.showcasePreview} aria-hidden="true">
+                <span className={styles.showcasePreview} data-parallax aria-hidden="true">
                   <span className={styles.previewTitle}>{showcase.title}</span>
                   <span className={styles.previewDetails}>
                     {showcase.details.map((detail) => <span key={detail}>{detail}</span>)}
@@ -178,7 +193,7 @@ export default function WelcomeExperience() {
           </div>
         </section>
 
-        <section className={styles.noticeboard} aria-labelledby="noticeboard-title">
+        <section className={styles.noticeboard} aria-labelledby="noticeboard-title" data-nav-theme="light">
           <div>
             <p className={styles.sectionEyebrow}>This month on campus</p>
             <h2 id="noticeboard-title">Keep up with what’s happening.</h2>
@@ -191,7 +206,7 @@ export default function WelcomeExperience() {
           </Link>
         </section>
 
-        <section className={styles.closing} aria-labelledby="closing-title">
+        <section className={styles.closing} aria-labelledby="closing-title" data-nav-theme="dark">
           <p className={styles.sectionEyebrow}>Your next idea can start here</p>
           <h2 id="closing-title">Make something that brings people together.</h2>
           <div className={styles.closingActions}>
@@ -199,7 +214,9 @@ export default function WelcomeExperience() {
             <LiveClock />
           </div>
         </section>
-      </main>
-    </div>
+        </main>
+        <ScrollEffects />
+      </div>
+    </SmoothScroll>
   );
 }

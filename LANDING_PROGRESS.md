@@ -37,3 +37,34 @@
 - Targeted ESLint on the changed TypeScript files passed.
 - `/welcome` returned HTTP 200; browser checks at desktop and phone widths found no horizontal overflow or console errors.
 - `npm run type-check` still exits with the known `refrence-repos/` errors; it reports no errors outside that tree.
+
+## Phase 2 — Scroll motion
+
+### Done
+
+- Added landing-only Lenis smooth scrolling, synchronized through the GSAP ticker with ScrollTrigger updates and lifecycle cleanup.
+- Added fixed navigation theme changes, a pinned word-by-word statement reveal, and restrained parallax for the desktop hero/showcase.
+- Kept pinning and parallax off for touch/small layouts and reduced-motion preferences; navigation themes remain available.
+- Disabled the shared route-entry animations only on `/welcome` so their transforms do not interfere with the pinned section.
+- Skipped `GlobalMotion` only on `/welcome`; other routes keep their existing shared motion.
+
+### Remaining
+
+- Phase 3: cursor-reactive hero fluid effect and its fallbacks.
+- Phase 4: public Noticeboard route and clearly labelled sample data.
+- Phase 5: product showcase motion, glass refinements, and event teaser data.
+- Phase 6: optional mascot and final accessibility/performance/mobile pass.
+
+### Known issues
+
+- `/noticeboard` is still linked but will not exist until Phase 4.
+- Supabase has no event schedule/location fields or achievements table; the Noticeboard must use clearly labelled sample data unless the user approves a data/schema change.
+- `npm run type-check` reports existing errors confined to `refrence-repos/`; do not change that tree as part of this work.
+
+### Phase 2 validation
+
+- Targeted ESLint on the changed TypeScript files and `git diff --check` passed.
+- `npm run type-check` still exits with the known `refrence-repos/` failures and reports no errors outside that tree.
+- The production bundle compiled successfully when the known reference-tree type-check failures were temporarily bypassed for browser validation; that temporary config change was removed.
+- `/welcome` returned HTTP 200. Desktop browser checks confirmed the pin stays at the viewport top, the statement words reveal while scrolling, navigation themes change by section, and parallax responds. Reduced-motion and mobile checks confirmed pin/parallax are disabled and found no horizontal overflow or page runtime errors.
+- Prefetch requests for `/noticeboard` can return 404 until Phase 4; this is expected.

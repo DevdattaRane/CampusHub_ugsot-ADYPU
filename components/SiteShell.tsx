@@ -40,7 +40,7 @@ export default function SiteShell({ children, currentUser }: Props) {
         </div>
       </div>
       <SvgDefs />
-      <GlobalMotion />
+      {!landing && <GlobalMotion />}
     </div>
   );
 }

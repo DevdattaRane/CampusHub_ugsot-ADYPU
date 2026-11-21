@@ -10,7 +10,7 @@ const links = [
 
 export default function Nav() {
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-landing-nav data-theme="light">
       <div className={styles.headerInner}>
         <Link href="/welcome" className={styles.brand} aria-label="UGSOT Campus Hub">
           <LogoMark />
@@ -18,7 +18,12 @@ export default function Nav() {
         </Link>
         <nav className={styles.navigation} aria-label="Main navigation">
           {links.map((link) => (
-            <Link href={link.href} key={link.href}>{link.label}</Link>
+            <Link href={link.href} key={link.href}>
+              <span className={styles.navRoll}>
+                <span>{link.label}</span>
+                <span aria-hidden="true">{link.label}</span>
+              </span>
+            </Link>
           ))}
         </nav>
         <Link href="/auth/sign-in" className={styles.signIn}>Sign in</Link>
