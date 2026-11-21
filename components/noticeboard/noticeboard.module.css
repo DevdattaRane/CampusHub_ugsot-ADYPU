@@ -1,0 +1,543 @@
+.board {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 18px clamp(18px, 5vw, 72px) 28px;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.topBar,
+.wordmark,
+.sectionHeading,
+.cardTopline,
+.sectionAction,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topBar {
+  width: min(100%, 1440px);
+  min-height: 48px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.wordmark {
+  justify-content: flex-start;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wordmarkMark {
+  display: grid;
+  width: 34px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font: 700 16px/1 var(--font-space-grotesk), sans-serif;
+}
+
+.wordmark strong,
+.wordmark small {
+  display: block;
+}
+
+.wordmark strong {
+  font: 700 16px/1.1 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.wordmark small {
+  margin-top: 3px;
+  color: var(--muted);
+  font: 500 9px/1.2 var(--font-jetbrains-mono), monospace;
+  letter-spacing: 0.06em;
+}
+
+.topLink,
+.footer a,
+.sectionAction a {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.topLink:hover,
+.footer a:hover,
+.sectionAction a:hover {
+  color: var(--electric-blue);
+  text-decoration: underline;
+}
+
+.hero {
+  display: grid;
+  width: min(100%, 1440px);
+  min-height: min(54vh, 570px);
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  align-items: center;
+  gap: clamp(28px, 7vw, 100px);
+  margin: 0 auto;
+  padding: clamp(50px, 9vh, 104px) 0 clamp(42px, 7vh, 82px);
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
+.eyebrow,
+.category,
+.sampleBadge,
+.sampleNoticeLabel,
+.eventFacts dt,
+.heroCaption {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+
+.hero h1 {
+  max-width: 900px;
+  font: 700 clamp(54px, 7.2vw, 108px)/0.9 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.075em;
+}
+
+.hero h1 > span {
+  color: var(--electric-blue);
+}
+
+.hero h1 sup {
+  display: inline-block;
+  margin-left: 12px;
+  color: var(--coral);
+  font: 500 12px/1 var(--font-jetbrains-mono), monospace;
+  letter-spacing: 0;
+  vertical-align: top;
+}
+
+.heroDescription {
+  max-width: 480px;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: clamp(16px, 1.8vw, 21px);
+  line-height: 1.55;
+}
+
+.heroArtwork {
+  position: relative;
+  display: grid;
+  width: min(100%, 390px);
+  aspect-ratio: 1.04;
+  justify-self: end;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 22% 22%, rgba(64, 92, 255, 0.34), transparent 34%),
+    radial-gradient(circle at 78% 72%, rgba(255, 112, 72, 0.32), transparent 35%),
+    var(--stone);
+}
+
+.heroArtwork::before,
+.heroArtwork::after {
+  position: absolute;
+  width: 40%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  content: '';
+}
+
+.heroArtwork::before {
+  top: 8%;
+  right: 4%;
+  background: var(--coral);
+  opacity: 0.88;
+}
+
+.heroArtwork::after {
+  bottom: 8%;
+  left: 3%;
+  background: var(--electric-blue);
+  opacity: 0.9;
+}
+
+.heroGlyph {
+  z-index: 1;
+  align-self: center;
+  justify-self: center;
+  color: var(--ink);
+  font: 700 clamp(180px, 29vw, 320px)/0.7 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.11em;
+  transform: translateX(-0.06em);
+}
+
+.heroCaption {
+  position: absolute;
+  z-index: 2;
+  right: 14px;
+  bottom: 14px;
+  color: var(--ink);
+  font-size: 9px;
+}
+
+.sampleNotice {
+  display: grid;
+  width: min(100%, 1440px);
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin: 0 auto clamp(72px, 11vw, 140px);
+  padding: 18px 20px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.sampleNoticeLabel {
+  padding: 5px 8px;
+  background: var(--mint);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.sampleNotice p {
+  max-width: 900px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.section {
+  width: min(100%, 1440px);
+  margin: 0 auto clamp(80px, 12vw, 150px);
+}
+
+.sectionHeading {
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.sectionHeading .eyebrow {
+  margin-bottom: 12px;
+}
+
+.sectionHeading h2 {
+  font: 700 clamp(34px, 5.5vw, 76px)/0.96 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.06em;
+}
+
+.sectionIntro {
+  max-width: 330px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.eventGrid,
+.achievementGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.eventCard {
+  position: relative;
+  display: flex;
+  min-height: 350px;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid var(--line);
+  background: var(--stone);
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.eventCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--electric-blue);
+}
+
+.eventCard[data-tone='0'] {
+  background: var(--electric-blue);
+  color: #fff;
+}
+
+.eventCard[data-tone='1'] {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.eventCard[data-tone='2'] {
+  background: var(--mint);
+}
+
+.cardTopline {
+  width: 100%;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.category {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.eventCard[data-tone='0'] .category,
+.eventCard[data-tone='1'] .category {
+  color: currentColor;
+  opacity: 0.74;
+}
+
+.sampleBadge {
+  padding: 4px 6px;
+  border: 1px solid currentColor;
+  font-size: 8px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.eventCard h3 {
+  max-width: 320px;
+  margin-top: 40px;
+  font: 700 clamp(23px, 2.7vw, 34px)/1.02 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.045em;
+}
+
+.cardDescription {
+  max-width: 360px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.eventCard[data-tone='0'] .cardDescription,
+.eventCard[data-tone='1'] .cardDescription {
+  color: currentColor;
+  opacity: 0.78;
+}
+
+.eventFacts {
+  display: grid;
+  width: 100%;
+  gap: 12px;
+  margin: auto 0 0;
+  padding-top: 28px;
+}
+
+.eventFacts > div {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.eventCard[data-tone='0'] .eventFacts > div,
+.eventCard[data-tone='1'] .eventFacts > div {
+  border-color: currentColor;
+}
+
+.eventFacts dt {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.eventCard[data-tone='0'] .eventFacts dt,
+.eventCard[data-tone='1'] .eventFacts dt {
+  color: currentColor;
+  opacity: 0.7;
+}
+
+.eventFacts dd {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.cardIndex {
+  position: absolute;
+  top: 64px;
+  right: 18px;
+  font: 700 12px/1 var(--font-jetbrains-mono), monospace;
+  opacity: 0.4;
+}
+
+.sectionAction {
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.achievementCard {
+  display: grid;
+  min-height: 210px;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-content: start;
+  gap: 16px;
+  padding: 20px;
+  border-top: 2px solid var(--ink);
+  background: var(--canvas);
+}
+
+.achievementMark {
+  display: grid;
+  width: 42px;
+  aspect-ratio: 1;
+  place-items: center;
+  background: var(--coral);
+  color: var(--ink);
+  font: 700 12px/1 var(--font-jetbrains-mono), monospace;
+}
+
+.achievementCard:nth-child(2) .achievementMark {
+  background: var(--electric-blue);
+  color: #fff;
+}
+
+.achievementCard:nth-child(3) .achievementMark {
+  background: var(--mint);
+}
+
+.achievementCard .cardTopline {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+}
+
+.achievementCard h3 {
+  margin-top: 20px;
+  font: 700 clamp(20px, 2.3vw, 28px)/1.05 var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.04em;
+}
+
+.achievementCard .cardDescription {
+  margin-top: 8px;
+}
+
+.footer {
+  width: min(100%, 1440px);
+  min-height: 52px;
+  gap: 16px;
+  margin: 0 auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.footer span {
+  color: var(--muted);
+  font: 500 10px/1.4 var(--font-jetbrains-mono), monospace;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr);
+    gap: 24px;
+    padding-block: 70px 56px;
+  }
+
+  .eventGrid,
+  .achievementGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eventCard:last-child,
+  .achievementCard:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .board {
+    padding-inline: 18px;
+  }
+
+  .topLink {
+    font-size: 12px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding-block: 62px 38px;
+  }
+
+  .hero h1 {
+    font-size: clamp(46px, 13vw, 70px);
+  }
+
+  .heroArtwork {
+    width: min(100%, 340px);
+    justify-self: center;
+  }
+
+  .heroGlyph {
+    font-size: clamp(200px, 62vw, 290px);
+  }
+
+  .sampleNotice {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 80px;
+    padding: 16px;
+  }
+
+  .sampleNoticeLabel {
+    width: fit-content;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .eventGrid,
+  .achievementGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .eventCard:last-child,
+  .achievementCard:last-child {
+    grid-column: auto;
+  }
+
+  .eventCard {
+    min-height: 320px;
+  }
+
+  .sectionAction {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eventCard {
+    transition: none;
+  }
+
+  .eventCard:hover {
+    transform: none;
+  }
+}

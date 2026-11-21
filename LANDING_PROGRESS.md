@@ -93,3 +93,26 @@
 - Targeted ESLint on the changed landing components and `git diff --check` passed.
 - `npm run type-check` still exits with the known `refrence-repos/` errors and reports no errors outside that tree.
 - `/welcome` returned HTTP 200. Browser validation confirmed the desktop shader renders without console/runtime errors; the canvas is removed on mobile-width and reduced-motion layouts, leaving the CSS fallback in place.
+
+## Phase 4 — Public Noticeboard
+
+### Done
+
+- Added a public `/noticeboard` route with a dedicated full-screen layout, sample event cards, and sample achievement highlights.
+- Clearly labelled every item and the page-level notice as illustrative sample content. No student names, live event claims, schema changes, or database/API calls were added.
+- Kept the shared app navigation, rail, and footer off this route through a narrowly scoped `SiteShell` exception; other routes are unchanged.
+
+### Remaining
+
+- Phase 5: product showcase motion, glass refinements, and event teaser data.
+- Phase 6: optional mascot and final accessibility/performance/mobile pass.
+
+### Known issues
+
+- The Noticeboard is a visual preview only. Supabase has no event schedule/location fields or achievements table, so its cards must remain clearly labelled until a suitable verified data source is approved.
+
+### Phase 4 validation
+
+- Targeted ESLint and `git diff --check` passed.
+- `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
+- `/noticeboard` returned HTTP 200 without authentication. Browser checks confirmed the landing-page link opens it, the shared app navigation/rail/footer are absent, all sample cards are labelled, and desktop/mobile layouts have no horizontal overflow. No browser runtime errors appeared after reload.

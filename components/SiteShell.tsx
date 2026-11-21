@@ -16,7 +16,10 @@ type Props = {
 
 export default function SiteShell({ children, currentUser }: Props) {
   const pathname = usePathname();
-  const immersive = pathname.startsWith('/auth/') || pathname === '/intro' || pathname === '/onboarding';
+  const immersive = pathname.startsWith('/auth/')
+    || pathname === '/intro'
+    || pathname === '/onboarding'
+    || pathname === '/noticeboard';
   const landing = pathname === '/welcome';
   const showAppShell = !immersive && !landing;
 
