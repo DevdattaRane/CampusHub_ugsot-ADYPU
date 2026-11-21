@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Grain from './Grain';
+import HeroFluid from './HeroFluid';
 import LiveClock from './LiveClock';
 import LogoMark from './LogoMark';
 import Nav from './Nav';
@@ -82,7 +83,7 @@ export default function WelcomeExperience() {
             <LiveClock />
           </div>
 
-          <div className={styles.heroVisual}>
+          <HeroFluid>
             <div className={styles.visualGrid} aria-hidden="true" />
             <span className={`${styles.orb} ${styles.orbBlue}`} data-parallax aria-hidden="true" />
             <span className={`${styles.orb} ${styles.orbCoral}`} data-parallax aria-hidden="true" />
@@ -99,7 +100,7 @@ export default function WelcomeExperience() {
               <strong>Ideas move further together.</strong>
               <Link href="/community">Explore the community <span aria-hidden="true">↗</span></Link>
             </div>
-          </div>
+          </HeroFluid>
         </section>
 
         <div className={styles.signalBar} data-nav-theme="dark" aria-label="CampusHub connects students through learning, building and sharing">

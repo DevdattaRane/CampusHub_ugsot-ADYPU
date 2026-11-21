@@ -68,3 +68,28 @@
 - The production bundle compiled successfully when the known reference-tree type-check failures were temporarily bypassed for browser validation; that temporary config change was removed.
 - `/welcome` returned HTTP 200. Desktop browser checks confirmed the pin stays at the viewport top, the statement words reveal while scrolling, navigation themes change by section, and parallax responds. Reduced-motion and mobile checks confirmed pin/parallax are disabled and found no horizontal overflow or page runtime errors.
 - Prefetch requests for `/noticeboard` can return 404 until Phase 4; this is expected.
+
+## Phase 3 — Hero fluid effect
+
+### Done
+
+- Added a cursor-reactive fluid shader to the hero visual using the already-installed Paper shader package; no dependency was added.
+- Limited the shader to visible, WebGL2-capable desktop layouts with a fine pointer and adequate device capability. Reduced-motion, mobile/touch, unsupported WebGL, low-power, and off-screen cases retain the CSS gradient and orb fallback.
+- Lazy-loaded the shader mount so the effect remains client-only.
+
+### Remaining
+
+- Phase 4: public Noticeboard route and clearly labelled sample data.
+- Phase 5: product showcase motion, glass refinements, and event teaser data.
+- Phase 6: optional mascot and final accessibility/performance/mobile pass.
+
+### Known issues
+
+- `/noticeboard` is still linked but will not exist until Phase 4.
+- Supabase has no event schedule/location fields or achievements table; the Noticeboard must use clearly labelled sample data unless the user approves a data/schema change.
+
+### Phase 3 validation
+
+- Targeted ESLint on the changed landing components and `git diff --check` passed.
+- `npm run type-check` still exits with the known `refrence-repos/` errors and reports no errors outside that tree.
+- `/welcome` returned HTTP 200. Browser validation confirmed the desktop shader renders without console/runtime errors; the canvas is removed on mobile-width and reduced-motion layouts, leaving the CSS fallback in place.
