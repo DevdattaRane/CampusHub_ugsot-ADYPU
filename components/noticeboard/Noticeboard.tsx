@@ -1,11 +1,20 @@
 import Link from 'next/link';
-import {
-  noticeboardAchievementSamples,
-  noticeboardEventSamples,
-} from '@/data/noticeboard.sample';
+import { noticeboardAchievementSamples } from '@/data/noticeboard.sample';
+import { getPublishedNoticeboardEvents } from '@/lib/db/noticeboard-events';
+import { formatEventDateRange } from '@/lib/dates';
+import type { NoticeboardCampusEvent } from '@/lib/types';
 import styles from './noticeboard.module.css';
 
-export default function Noticeboard() {
+export default async function Noticeboard() {
+  let events: NoticeboardCampusEvent[] = [];
+  let eventLoadError = false;
+  try {
+    events = await getPublishedNoticeboardEvents();
+  } catch (error) {
+    console.error('Unable to load public Noticeboard events.', error);
+    eventLoadError = true;
+  }
+
   return (
     <main className={styles.board}>
       <header className={styles.topBar}>
@@ -38,11 +47,10 @@ export default function Noticeboard() {
       </section>
 
       <aside className={styles.sampleNotice} aria-label="Sample content notice">
-        <span className={styles.sampleNoticeLabel}>PREVIEW ONLY</span>
+        <span className={styles.sampleNoticeLabel}>RECOGNITIONS PREVIEW</span>
         <p>
-          Every listing below is illustrative sample data, not a verified campus event or student
-          achievement. This board is not yet connected to a live event schedule or achievements
-          database.
+          Event listings are published by campus organizers. Community recognitions below remain
+          illustrative previews; no real student names or achievement records are shown.
         </p>
       </aside>
 
@@ -53,34 +61,45 @@ export default function Noticeboard() {
             <h2 id="events-title">Coming up</h2>
           </div>
           <p className={styles.sectionIntro}>
-            Sample event cards show how campus listings will appear here.
+            Upcoming events published by campus organizers, with dates and locations.
           </p>
         </div>
 
         <div className={styles.eventGrid}>
-          {noticeboardEventSamples.map((event, index) => (
-            <article className={styles.eventCard} data-tone={index} key={event.id}>
-              <div className={styles.cardTopline}>
-                <span className={styles.category}>{event.category}</span>
-                <span className={styles.sampleBadge}>SAMPLE</span>
-              </div>
-              <h3>{event.title}</h3>
-              <p className={styles.cardDescription}>{event.description}</p>
-              <dl className={styles.eventFacts}>
-                <div>
-                  <dt>WHEN</dt>
-                  <dd>{event.when}</dd>
+          {eventLoadError ? (
+            <p className={styles.eventMessage} role="alert">
+              Live event listings are temporarily unavailable. Please try again later.
+            </p>
+          ) : events.length ? (
+            events.map((event, index) => (
+              <article className={styles.eventCard} data-tone={index % 3} key={event.id}>
+                <div className={styles.cardTopline}>
+                  <span className={styles.category}>{event.category}</span>
+                  <span className={styles.sampleBadge}>PUBLISHED</span>
                 </div>
-                <div>
-                  <dt>WHERE</dt>
-                  <dd>{event.where}</dd>
-                </div>
-              </dl>
-              <span className={styles.cardIndex} aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-            </article>
-          ))}
+                <h3>{event.title}</h3>
+                <p className={styles.cardDescription}>{event.description}</p>
+                <dl className={styles.eventFacts}>
+                  <div>
+                    <dt>WHEN</dt>
+                    <dd>{formatEventDateRange(event.start, event.end)}</dd>
+                  </div>
+                  <div>
+                    <dt>WHERE</dt>
+                    <dd>{event.place}</dd>
+                  </div>
+                </dl>
+                <Link className={styles.eventCardLink} href={`/events#event-${event.id}`}>
+                  View registration details <span aria-hidden="true">↗</span>
+                </Link>
+                <span className={styles.cardIndex} aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              </article>
+            ))
+          ) : (
+            <p className={styles.eventMessage}>No upcoming events have been published yet.</p>
+          )}
         </div>
 
         <div className={styles.sectionAction}>

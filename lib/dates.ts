@@ -41,6 +41,13 @@ export function formatShort(iso: string): string {
   return `${MONTHS_SHORT[d.getMonth()]} ${d.getDate()}`;
 }
 
+export function formatEventDateRange(start: string, end?: string): string {
+  const startLabel = `${formatShort(start)} ${start.slice(0, 4)}`;
+  if (!end || end === start) return startLabel;
+  const endLabel = `${formatShort(end)} ${end.slice(0, 4)}`;
+  return `${startLabel} – ${endLabel}`;
+}
+
 /** "Fri, 30 Oct" */
 export function formatWeekday(iso: string): string {
   const d = parseDate(iso);

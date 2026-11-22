@@ -22,6 +22,7 @@ type Props = {
   signedIn: boolean;
   statuses: EventRegistrationStatus[];
   registrationUnavailable: boolean;
+  eventListingsUnavailable?: boolean;
   isOrganizer?: boolean;
 };
 
@@ -31,6 +32,7 @@ export default function EventsBrowser({
   signedIn,
   statuses,
   registrationUnavailable,
+  eventListingsUnavailable = false,
   isOrganizer,
 }: Props) {
   const [mode, setMode] = useState<(typeof MODES)[number]>('All');
@@ -55,6 +57,11 @@ export default function EventsBrowser({
           Registration details are temporarily unavailable. Please try again later.
         </p>
       )}
+      {eventListingsUnavailable && (
+        <p className="form-error" role="alert">
+          Organizer-published event listings are temporarily unavailable. Please try again later.
+        </p>
+      )}
       <section aria-label="Filters" className="card filters">
         <FilterPills label="Mode" options={MODES} value={mode} onChange={setMode} />
         <FilterPills label="Where" options={WHERE} value={where} onChange={setWhere} />
@@ -73,7 +80,7 @@ export default function EventsBrowser({
           {upcoming.length > 0 ? (
             <div className="event-grid">
               {upcoming.map((e) => (
-                <article key={e.id} className="event-card">
+                <article id={`event-${e.id}`} key={e.id} className="event-card">
                   <div className="event-card__top">
                     <EventDateBlock event={e} variant="card" />
                     <div style={{ minWidth: 0 }}>
@@ -112,7 +119,13 @@ export default function EventsBrowser({
               ))}
             </div>
           ) : (
-            <p className="empty">No upcoming events match these filters. Try another combo.</p>
+            !eventListingsUnavailable && (
+              <p className="empty">
+                {events.length
+                  ? 'No upcoming events match these filters. Try another combo.'
+                  : 'No upcoming events have been published by organizers yet.'}
+              </p>
+            )
           )}
         </>
       ) : (

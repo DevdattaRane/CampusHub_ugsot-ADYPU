@@ -157,3 +157,25 @@
 - Targeted ESLint and `git diff --check` passed.
 - `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
 - `/welcome` returned HTTP 200. Browser checks at 390, 768, 1024, and 1440 viewport settings found no horizontal overflow. Keyboard testing confirmed the skip link is first and moves focus to main. Reduced-motion testing confirmed the shader and pinning are disabled while showcase cards remain visible. No page runtime errors appeared after reload; Next.js still emits its existing development font-preload warnings.
+
+## Phase 7 — Organizer-published live events
+
+### Done
+
+- Extended `event_catalog` with date range, venue, category, event format, location, publication state, and an explicit Noticeboard-managed marker.
+- Added organizer-only draft, edit, publish, and unpublish workflows at `/organizer/events`. Server validation and row-level security restrict mutations to organizer accounts and hide managed drafts from public and student reads.
+- Connected the public Noticeboard, landing teasers, and Events page to upcoming published listings. Removed the sample event fixtures; achievement previews remain clearly marked as samples.
+- Updated the generated database types and `supabase/full_schema.sql`. Existing catalog entries remain unpublished; no event records were invented or seeded.
+
+### Known issues
+
+- The new migration has not been applied to the configured Supabase database. Until it is applied and an organizer publishes an event, live listings cannot load or appear.
+- Achievement previews remain illustrative because the project still has no verified achievement source or public-consent workflow.
+- The project-wide type-check still has the existing errors under `refrence-repos/`.
+
+### Phase 7 validation
+
+- Targeted ESLint and `git diff --check` passed.
+- `npm run type-check` still exits with the known 369 `refrence-repos/` errors and reports no errors outside that tree.
+- `/welcome`, `/noticeboard`, and `/events` returned HTTP 200. Responsive browser checks at 390 and 1440 viewport settings found no horizontal overflow. Unauthenticated manager access reached sign-in; unauthenticated create returned 401, and invalid JSON returned 400.
+- Since the migration was not applied, the connected database reported the expected missing event-catalog columns. Public routes surfaced an explicit unavailable state rather than showing sample event records or failing the page.

@@ -351,6 +351,31 @@
   border-color: currentColor;
 }
 
+.eventCardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+.eventCardLink:hover {
+  text-decoration-thickness: 2px;
+}
+
+.eventMessage {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .eventFacts dt {
   color: var(--muted);
   font-size: 8px;

@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { noticeboardEventSamples } from '@/data/noticeboard.sample';
+import { getPublishedNoticeboardEvents } from '@/lib/db/noticeboard-events';
+import { formatEventDateRange } from '@/lib/dates';
+import type { NoticeboardCampusEvent } from '@/lib/types';
 import Grain from './Grain';
 import HeroFluid from './HeroFluid';
 import LiveClock from './LiveClock';
@@ -63,9 +65,16 @@ const showcases = [
   },
 ];
 
-const landingEventTeasers = noticeboardEventSamples.slice(0, 2);
+export default async function WelcomeExperience() {
+  let landingEventTeasers: NoticeboardCampusEvent[] = [];
+  let eventLoadError = false;
+  try {
+    landingEventTeasers = await getPublishedNoticeboardEvents(2);
+  } catch (error) {
+    console.error('Unable to load landing page event listings.', error);
+    eventLoadError = true;
+  }
 
-export default function WelcomeExperience() {
   return (
     <SmoothScroll>
       <div className={styles.welcomePage}>
@@ -203,28 +212,37 @@ export default function WelcomeExperience() {
         <section className={styles.noticeboard} aria-labelledby="noticeboard-title" data-nav-theme="light">
           <div className={styles.noticeboardIntro}>
             <p className={`${styles.sectionEyebrow} ${styles.noticeboardEyebrow}`}>
-              Campus calendar <span className={styles.noticeboardSample}>SAMPLE PREVIEW</span>
+              Campus calendar <span className={styles.noticeboardSample}>ORGANIZER PUBLISHED</span>
             </p>
             <h2 id="noticeboard-title">Keep up with what’s happening.</h2>
             <p>
-              These illustrative teasers use sample event details. Verified dates and locations are not connected yet.
+              Upcoming dates and locations are published by campus organizers. Achievement previews remain illustrative on the Noticeboard.
             </p>
           </div>
           <div className={styles.noticeboardEvents}>
-            {landingEventTeasers.map((event) => (
-              <article className={styles.noticeboardEvent} key={event.id}>
-                <div className={styles.noticeboardEventCopy}>
-                  <p>{event.category}</p>
-                  <h3>{event.title}</h3>
-                </div>
-                <div className={styles.noticeboardEventMeta}>
-                  <span className={styles.noticeboardSample}>SAMPLE</span>
-                  <span>{event.when}</span>
-                </div>
-              </article>
-            ))}
+            {eventLoadError ? (
+              <p className={styles.noticeboardMessage} role="alert">
+                Live event listings are temporarily unavailable.
+              </p>
+            ) : landingEventTeasers.length ? (
+              landingEventTeasers.map((event) => (
+                <article className={styles.noticeboardEvent} key={event.id}>
+                  <div className={styles.noticeboardEventCopy}>
+                    <p>{event.category}</p>
+                    <h3><Link href={`/events#event-${event.id}`}>{event.title}</Link></h3>
+                  </div>
+                  <div className={styles.noticeboardEventMeta}>
+                    <span className={styles.noticeboardSample}>{event.mode}</span>
+                    <time dateTime={event.start}>{formatEventDateRange(event.start, event.end)}</time>
+                    <span>{event.place}</span>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className={styles.noticeboardMessage}>No upcoming events have been published yet.</p>
+            )}
             <Link href="/noticeboard" className={styles.noticeboardLink}>
-              View sample updates <span aria-hidden="true">↗</span>
+              View the Noticeboard <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </section>

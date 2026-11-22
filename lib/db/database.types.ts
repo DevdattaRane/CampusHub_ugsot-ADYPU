@@ -13,6 +13,16 @@ export type Database = {
           theme: string | null;
           prize: string | null;
           rules: string[];
+          category: string;
+          description: string;
+          mode: 'Online' | 'Offline';
+          event_where: 'In campus' | 'Out of campus';
+          place: string;
+          start_date: string | null;
+          end_date: string | null;
+          noticeboard_managed: boolean;
+          is_published: boolean;
+          noticeboard_updated_at: string;
         };
         Insert: {
           id: string;
@@ -25,6 +35,16 @@ export type Database = {
           theme?: string | null;
           prize?: string | null;
           rules?: string[];
+          category?: string;
+          description?: string;
+          mode?: 'Online' | 'Offline';
+          event_where?: 'In campus' | 'Out of campus';
+          place?: string;
+          start_date?: string | null;
+          end_date?: string | null;
+          noticeboard_managed?: boolean;
+          is_published?: boolean;
+          noticeboard_updated_at?: string;
         };
         Update: Partial<Database['public']['Tables']['event_catalog']['Insert']>;
         Relationships: [];

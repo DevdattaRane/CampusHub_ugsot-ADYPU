@@ -1,7 +1,12 @@
 export type EventType = 'event' | 'hackathon';
-export type EventCategory = 'Hackathon' | 'Workshop' | 'Contest' | 'Meetup' | 'Sprint' | 'Design jam';
-export type EventMode = 'Online' | 'Offline';
-export type EventWhere = 'In campus' | 'Out of campus';
+export const EVENT_CATEGORIES = ['Hackathon', 'Workshop', 'Contest', 'Meetup', 'Sprint', 'Design jam'] as const;
+export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+export const PUBLISHABLE_EVENT_CATEGORIES = ['Workshop', 'Contest', 'Meetup', 'Sprint', 'Design jam'] as const;
+export type PublishableEventCategory = (typeof PUBLISHABLE_EVENT_CATEGORIES)[number];
+export const EVENT_MODES = ['Online', 'Offline'] as const;
+export type EventMode = (typeof EVENT_MODES)[number];
+export const EVENT_LOCATIONS = ['In campus', 'Out of campus'] as const;
+export type EventWhere = (typeof EVENT_LOCATIONS)[number];
 
 interface CampusEventBase {
   id: string;
@@ -32,6 +37,20 @@ export type CampusEvent = CampusEventBase & (
       rules: string[];
     }
 );
+
+export type NoticeboardCampusEvent = Omit<
+    Extract<CampusEvent, { type: 'event' }>,
+    'category'
+> & {
+    category: PublishableEventCategory;
+    description: string;
+    isPublished: boolean;
+};
+
+export type NoticeboardEventInput = Omit<
+    NoticeboardCampusEvent,
+    'id' | 'type' | 'registerUrl' | 'category'
+> & { category: PublishableEventCategory };
 
 export interface Achievement {
   title: string;
