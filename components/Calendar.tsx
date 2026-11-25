@@ -1,9 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState, type ReactNode } from 'react';
-import type { CampusEvent, EventType } from '@/lib/types';
-import { stickerTilt, typeColors, weekdayStripe } from '@/lib/colors';
-import { MONTHS, MONTHS_SHORT, eventDays, parseDate, sameDay, toISO } from '@/lib/dates';
+import type { CampusEvent, EventCategory } from '@/lib/types';
+import { typeColors, weekdayStripe } from '@/lib/colors';
+import { MONTHS, MONTHS_SHORT, eventDays, formatShort, parseDate, sameDay, toISO } from '@/lib/dates';
 import { ChevronLeft, ChevronRight, Sparkle } from './icons';
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -16,14 +17,14 @@ type Props = {
   /** When set, days are buttons and clicking one reports its date (or null to clear). */
   selected?: string | null;
   onSelect?: (iso: string | null) => void;
-  tallDays?: boolean;
+  wide?: boolean;
   /** Rendered between the header and the grid (e.g. filters). */
   toolbar?: ReactNode;
   /** Rendered under the grid (e.g. the agenda). */
   footer?: ReactNode;
 };
 
-export default function Calendar({ events, today, selected = null, onSelect, tallDays = false, toolbar, footer }: Props) {
+export default function Calendar({ events, today, selected = null, onSelect, wide = false, toolbar, footer }: Props) {
   const todayDate = parseDate(today);
   const [view, setView] = useState({ year: todayDate.getFullYear(), month: todayDate.getMonth() });
   const selectable = typeof onSelect === 'function';
@@ -57,10 +58,10 @@ export default function Calendar({ events, today, selected = null, onSelect, tal
     onSelect?.(null);
   };
 
-  const legend = Object.keys(typeColors) as EventType[];
+  const legend = Object.keys(typeColors) as EventCategory[];
 
   return (
-    <section className="calendar" aria-labelledby="calendar-title">
+    <section className={`calendar${wide ? ' calendar--wide' : ''}`} aria-labelledby="calendar-title">
       <div className="calendar__head">
         <h2 id="calendar-title" className="calendar__title">
           <Sparkle />
@@ -68,8 +69,8 @@ export default function Calendar({ events, today, selected = null, onSelect, tal
           <span className="sr-only">, {MONTHS[view.month]} {view.year}</span>
         </h2>
         <div className="legend" aria-label="Event types">
-          {legend.map((t, i) => (
-            <span key={t} className="sticker" style={{ background: typeColors[t].sticker, transform: `rotate(${stickerTilt[i % 4]})` }}>{t}</span>
+          {legend.map((t) => (
+            <span key={t} className="sticker" style={{ background: typeColors[t].bg }}>{t}</span>
           ))}
         </div>
       </div>
@@ -92,7 +93,7 @@ export default function Calendar({ events, today, selected = null, onSelect, tal
 
             {cells.map(({ date, iso, inMonth }) => {
               const num = String(date.getDate()).padStart(2, '0');
-              const cls = `day${tallDays ? ' day--tall' : ''}`;
+              const cls = 'day';
               if (!inMonth) {
                 return (
                   <div key={iso} aria-hidden="true" className={`${cls} day--outside`}>
@@ -102,26 +103,46 @@ export default function Calendar({ events, today, selected = null, onSelect, tal
               }
               const dayEvents = byDay.get(iso) ?? [];
               const isToday = sameDay(date, todayDate);
+              const singleEvent = dayEvents.length === 1 ? dayEvents[0] : undefined;
+              const eventDescription = dayEvents.map((e) => `${e.title} (${e.category})`).join(', ');
               const content = (
                 <>
                   <span className="day__num">{num}</span>
-                  {dayEvents.slice(0, MAX_CHIPS).map((e, k) => (
-                    <span key={e.id} className="sticker" style={{ background: typeColors[e.type].sticker, transform: `rotate(${stickerTilt[(date.getDate() + k) % 4]})` }}>
-                      {e.title}
+                  {singleEvent ? (
+                    <span className="day__single-event">
+                      <span className="day__single-title">{singleEvent.title}</span>
+                      <span className="day__event-type">{singleEvent.category}</span>
                     </span>
-                  ))}
-                  {dayEvents.length > MAX_CHIPS && <span className="day__more">+{dayEvents.length - MAX_CHIPS} more</span>}
+                  ) : (
+                    <>
+                      {dayEvents.slice(0, MAX_CHIPS).map((e) => (
+                        <span key={e.id} className="sticker" style={{ background: typeColors[e.category].bg }} title={e.title}>
+                          <span className="day__event-title">{e.title}</span>
+                          <span className="day__event-type">{e.category}</span>
+                        </span>
+                      ))}
+                      {dayEvents.length > MAX_CHIPS && <span className="day__more">+{dayEvents.length - MAX_CHIPS} more</span>}
+                    </>
+                  )}
+                  {dayEvents.length > 0 && (
+                    <span className="day__markers" aria-hidden="true">
+                      {dayEvents.map((e) => (
+                        <span key={e.id} className="day__marker" style={{ background: typeColors[e.category].bg }} />
+                      ))}
+                    </span>
+                  )}
                 </>
               );
-              const label = `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}${isToday ? ', today' : ''}, ${dayEvents.length === 1 ? '1 event' : `${dayEvents.length} events`}`;
-              const className = `${cls}${isToday ? ' day--today' : ''}`;
+              const label = `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}${isToday ? ', today' : ''}${dayEvents.length ? `: ${eventDescription}` : ', no events'}`;
+              const className = `${cls}${isToday ? ' day--today' : ''}${singleEvent ? ' day--single' : ''}`;
+              const style = singleEvent ? { background: typeColors[singleEvent.category].bg } : undefined;
 
               return selectable ? (
-                <button key={iso} type="button" className={className} aria-label={label} aria-pressed={selected === iso} onClick={() => onSelect?.(selected === iso ? null : iso)}>
+                <button key={iso} type="button" className={className} style={style} title={eventDescription || undefined} aria-label={label} aria-pressed={selected === iso} onClick={() => onSelect?.(selected === iso ? null : iso)}>
                   {content}
                 </button>
               ) : (
-                <div key={iso} className={className} aria-label={label}>
+                <div key={iso} className={className} style={style} title={eventDescription || undefined} aria-label={label}>
                   {content}
                 </div>
               );
@@ -132,6 +153,22 @@ export default function Calendar({ events, today, selected = null, onSelect, tal
           <ChevronRight />
         </button>
       </div>
+
+      {selected && (
+        <section className="calendar__selected-events" aria-live="polite" aria-label={`Events on ${formatShort(selected)}`}>
+          <h3 className="agenda__title">Events on {formatShort(selected)}</h3>
+          {(byDay.get(selected) ?? []).length ? (byDay.get(selected) ?? []).map((event) => (
+            <article key={event.id} className="calendar__selected-event" style={{ background: typeColors[event.category].bg }}>
+              <strong title={event.title}>
+                {event.type === 'hackathon'
+                  ? <Link href={`/events/${event.id}`} className="event-card__title-link">{event.title}</Link>
+                  : event.title}
+              </strong>
+              <span className="calendar__selected-type">{event.category}</span>
+            </article>
+          )) : <p className="agenda__empty">No events on this day.</p>}
+        </section>
+      )}
 
       {footer}
     </section>

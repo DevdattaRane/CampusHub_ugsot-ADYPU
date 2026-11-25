@@ -1,20 +1,21 @@
 import PageHero from '@/components/PageHero';
 import StudentsBrowser from '@/components/StudentsBrowser';
-import { students } from '@/lib/data';
+import { getPublicStudents } from '@/lib/db/dashboard';
 
-export const metadata = { title: 'Students · UGSOTADYPU Hub' };
+export const dynamic = 'force-dynamic';
+export const metadata = { title: 'Students · CampusHub · UGSOT' };
 
-export default function StudentsPage() {
+export default async function StudentsPage() {
+  const studentsList = await getPublicStudents();
   return (
     <main className="container page">
       <PageHero
         tag="Builders on campus"
-        tagColor={{ bg: '#DDF5EA', fg: '#11694A' }}
         before="Find your "
         highlight="squad"
-        sub="Search classmates by skill, and see who’s looking for a team."
+        sub="Meet classmates by what they’re into, see who’s looking for a team, and find your next collaborator."
       />
-      <StudentsBrowser students={students} />
+      <StudentsBrowser students={studentsList} />
     </main>
   );
 }

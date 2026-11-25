@@ -1,23 +1,26 @@
 import PageHero from '@/components/PageHero';
-import CommunityFeed from '@/components/CommunityFeed';
-import { posts } from '@/lib/data';
+import CommunityView from '@/components/CommunityView';
+import { getCurrentUser } from '@/lib/auth';
+import { getCommunityPosts } from '@/lib/db/community';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Community · UGSOTADYPU Hub' };
+export const metadata = { title: 'Community · CampusHub · UGSOT' };
 
-export default function CommunityPage() {
-  const sorted = [...posts].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+export default async function CommunityPage() {
+  const currentUser = await getCurrentUser();
+  const initialPosts = await getCommunityPosts();
+
   return (
     <main className="container page page--narrow">
       <PageHero
-        tag="Ask · Help · Build"
-        tagColor={{ bg: '#E3E9FF', fg: '#2A3FB0' }}
-        before="What’s "
-        highlight="up"
-        after="?"
-        sub="Ask questions, get unstuck, and find people to build with."
+        tag="Ask · Discuss · Build"
+        before=""
+        highlight="Community"
+        sub="Ask questions, discuss architectures, share solutions, and stay updated."
       />
-      <CommunityFeed initialPosts={sorted} now={Date.now()} />
+      <div style={{ marginTop: 24 }}>
+        <CommunityView initialPosts={initialPosts} currentUser={currentUser} />
+      </div>
     </main>
   );
 }

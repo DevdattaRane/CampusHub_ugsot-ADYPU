@@ -8,13 +8,15 @@ import { initialsOf } from './Avatar';
 import { getStudent, CURRENT_USER_ID } from '@/lib/data';
 
 export default function ProfileFab() {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  return <ProfileMenu key={pathname} pathname={pathname} />;
+}
+
+function ProfileMenu({ pathname }: { pathname: string }) {
+  const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const me = getStudent(CURRENT_USER_ID);
 
-  // Close when navigating, clicking outside, or pressing Escape.
-  useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
@@ -36,14 +38,14 @@ export default function ProfileFab() {
       {open && (
         <nav aria-label="Profiles" id="profile-menu" className="fab__menu">
           <Link href="/profile" className="fab__link" aria-current={pathname === '/profile' ? 'page' : undefined}>
-            <span aria-hidden="true" className="fab__icon" style={{ background: 'var(--primary)', color: '#fff' }}>
+            <span aria-hidden="true" className="fab__icon fab__icon--me">
               {me ? initialsOf(me.name) : 'ME'}
             </span>
             Your profile
           </Link>
           <Link href="/students" className="fab__link" aria-current={pathname === '/students' ? 'page' : undefined}>
-            <span aria-hidden="true" className="fab__icon" style={{ background: '#DDF5EA' }}>
-              <Search color="#11694A" />
+            <span aria-hidden="true" className="fab__icon">
+              <Search />
             </span>
             Explore profiles
           </Link>

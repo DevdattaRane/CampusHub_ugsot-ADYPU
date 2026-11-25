@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import type { CurrentUser } from '@/lib/auth';
 import type { Post, PostTag } from '@/lib/types';
 import { tagColors } from '@/lib/colors';
 import { timeAgo } from '@/lib/dates';
@@ -9,12 +10,24 @@ import { CURRENT_USER_ID, getEvent, getStudent } from '@/lib/data';
 import Avatar from './Avatar';
 import FilterPills from './FilterPills';
 import { ArrowUp, Bubble } from './icons';
+import Button from './ui/Button';
+import Card from './ui/Card';
+import Tag from './ui/Tag';
 
 const TAGS: PostTag[] = ['Need help', 'Ask', 'Find teammate', 'Showcase'];
 const FILTERS = ['All', ...TAGS] as const;
 
-export default function CommunityFeed({ initialPosts, now }: { initialPosts: Post[]; now: number }) {
+export default function CommunityFeed({
+  initialPosts,
+  now: initialNow,
+  currentUser,
+}: {
+  initialPosts: Post[];
+  now: number;
+  currentUser: CurrentUser | null;
+}) {
   const [posts, setPosts] = useState(initialPosts);
+  const [now, setNow] = useState(initialNow);
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('All');
   const [draft, setDraft] = useState('');
   const [draftTag, setDraftTag] = useState<PostTag>('Ask');
@@ -24,45 +37,59 @@ export default function CommunityFeed({ initialPosts, now }: { initialPosts: Pos
 
   const submit = () => {
     const text = draft.trim();
-    if (!text) return;
+    if (!text || !currentUser) return;
+    const createdAt = new Date().toISOString();
     const long = text.length > 80;
+    const authorId = currentUser.email.split('@')[0];
     const post: Post = {
       id: `local-${Date.now()}`,
       tag: draftTag,
-      authorId: CURRENT_USER_ID,
-      createdAt: new Date().toISOString(),
+      authorId,
+      createdAt,
       title: long ? `${text.slice(0, 80)}…` : text,
       body: long ? text : '',
       score: 0,
       replies: 0,
     };
     setPosts((p) => [post, ...p]);
+    setNow(Date.parse(createdAt));
     setDraft('');
     setFilter('All');
   };
 
   return (
     <>
-      <section aria-label="New post" className="composer">
-        <label htmlFor="new-post" className="composer__label">Start a post</label>
-        <textarea id="new-post" rows={3} className="textarea" placeholder="What do you need help with, or who are you looking for?" value={draft} onChange={(e) => setDraft(e.target.value)} />
-        <div className="composer__foot">
-          <div className="pill-group" role="group" aria-label="Post tag">
-            {TAGS.map((t) => {
-              const on = draftTag === t;
-              return (
-                <button key={t} type="button" className="pill pill--small" aria-pressed={on} onClick={() => setDraftTag(t)}
-                  style={on ? undefined : { background: tagColors[t].bg, color: tagColors[t].fg, borderColor: tagColors[t].bg }}>
-                  {t}
-                </button>
-              );
-            })}
+      {currentUser ? (
+        <Card role="region" aria-label="New post" className="composer">
+          <label htmlFor="new-post" className="composer__label">Start a post</label>
+          <textarea id="new-post" rows={3} className="textarea" placeholder="What do you need help with, or who are you looking for?" value={draft} onChange={(e) => setDraft(e.target.value)} />
+          <div className="composer__foot">
+            <div className="pill-group" role="group" aria-label="Post tag">
+              {TAGS.map((t) => {
+                const on = draftTag === t;
+                return (
+                  <button key={t} type="button" className="pill pill--small" aria-pressed={on} onClick={() => setDraftTag(t)}
+                    style={on ? undefined : { background: tagColors[t].bg, color: tagColors[t].fg, borderColor: tagColors[t].bg }}>
+                    {t}
+                  </button>
+                );
+              })}
+            </div>
+            <Button onClick={submit} disabled={!draft.trim()}>
+              Post it
+            </Button>
           </div>
-          <button type="button" className="btn btn--primary" onClick={submit} disabled={!draft.trim()} style={!draft.trim() ? { opacity: 0.6, cursor: 'not-allowed' } : undefined}>
-            Post it
-          </button>
-        </div>
-      </section>
+        </Card>
+      ) : (
+        <Card role="region" aria-label="Sign in to post" className="composer" style={{ gap: 10 }}>
+          <h2 className="composer__label">Join the campus conversation</h2>
+          <p style={{ fontSize: 15, lineHeight: 1.45 }}>Sign in or create an account to start conversations, ask for project help, or find hackathon teammates.</p>
+          <div className="btn-row" style={{ marginTop: 4 }}>
+            <Link href="/auth/sign-in" className="btn btn--primary">Sign in</Link>
+            <Link href="/auth/register" className="btn btn--outline">Create an account</Link>
+          </div>
+        </Card>
+      )}
 
       <FilterPills label="Filter by tag" options={FILTERS} value={filter} onChange={setFilter} />
 
@@ -73,18 +100,18 @@ export default function CommunityFeed({ initialPosts, now }: { initialPosts: Pos
         const c = tagColors[p.tag];
         return (
           <article key={p.id} className="post">
-            <button type="button" className="vote" aria-pressed={isVoted} aria-label={`Upvote, ${p.score + (isVoted ? 1 : 0)} votes`} onClick={() => setVoted((v) => ({ ...v, [p.id]: !v[p.id] }))}>
+            <Button variant="outline" className="vote" aria-pressed={isVoted} aria-label={`Upvote, ${p.score + (isVoted ? 1 : 0)} votes`} onClick={() => setVoted((v) => ({ ...v, [p.id]: !v[p.id] }))}>
               <ArrowUp />
               <span className="vote__count">{p.score + (isVoted ? 1 : 0)}</span>
-            </button>
+            </Button>
             <div className="post__body">
               <div className="post__meta">
-                <span className="chip" style={{ background: c.bg, color: c.fg }}>{p.tag}</span>
+                <Tag className="chip" style={{ background: c.bg, color: c.fg }}>{p.tag}</Tag>
                 {author && (
                   <span className="post__author">
                     <Avatar studentId={author.id} name={author.name} size="sm" />
                     <Link href={author.id === CURRENT_USER_ID ? '/profile' : `/students/${author.id}`}>{author.name}</Link>
-                    · {timeAgo(p.createdAt, p.id.startsWith('local-') ? Date.now() : now)}
+                    · {timeAgo(p.createdAt, now)}
                   </span>
                 )}
               </div>

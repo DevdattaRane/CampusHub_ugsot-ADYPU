@@ -1,24 +1,52 @@
+import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import EventsBrowser from '@/components/EventsBrowser';
-import { Plus } from '@/components/icons';
-import { events } from '@/lib/data';
 import { todayISO } from '@/lib/dates';
+import { getCurrentUser } from '@/lib/auth';
+import { getEventRegistrationStatuses, type EventRegistrationStatus } from '@/lib/db/events';
+import { getPublishedNoticeboardEvents } from '@/lib/db/noticeboard-events';
+import type { NoticeboardCampusEvent } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Events · UGSOTADYPU Hub' };
+export const metadata = { title: 'Events · CampusHub · UGSOT' };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const currentUser = await getCurrentUser();
+  let visibleEvents: NoticeboardCampusEvent[] = [];
+  let eventListingsUnavailable = false;
+  try {
+    visibleEvents = await getPublishedNoticeboardEvents();
+  } catch (error) {
+    console.error('Unable to load published organizer event listings.', error);
+    eventListingsUnavailable = true;
+  }
+
+  let statuses: EventRegistrationStatus[] = [];
+  let registrationUnavailable = false;
+  try {
+    statuses = await getEventRegistrationStatuses(visibleEvents.map((event) => event.id));
+  } catch (error) {
+    console.error('Unable to load event registration availability.', error);
+    registrationUnavailable = true;
+  }
+
   return (
     <main className="container page">
       <PageHero
         tag="Hack · Learn · Win"
-        tagColor={{ bg: '#FFE1EC', fg: '#A3164E' }}
         before="All the "
         highlight="events"
-        sub="Hackathons, workshops and contests, on campus and beyond."
-        action={<button type="button" className="btn btn--primary"><Plus />Submit an event</button>}
+        sub="Browse upcoming events published by campus organizers, and register for a new opportunity."
       />
-      <EventsBrowser events={events} today={todayISO()} />
+      {currentUser?.role === 'organizer' && (
+        <p style={{ display: 'flex', justifyContent: 'flex-end', margin: '16px 0' }}>
+          <Link href="/organizer/events" className="btn btn--ghost">Manage published listings</Link>
+        </p>
+      )}
+      <EventsBrowser events={visibleEvents} today={todayISO()} signedIn={Boolean(currentUser)}
+        isOrganizer={currentUser?.role === 'organizer'}
+        statuses={statuses} registrationUnavailable={registrationUnavailable}
+        eventListingsUnavailable={eventListingsUnavailable} />
     </main>
   );
 }

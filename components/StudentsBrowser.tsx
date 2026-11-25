@@ -5,6 +5,10 @@ import { useMemo, useState } from 'react';
 import type { Student } from '@/lib/types';
 import Avatar from './Avatar';
 import FilterPills from './FilterPills';
+import ForkButton from './ForkButton';
+import Button from './ui/Button';
+import Input from './ui/Input';
+import Tag from './ui/Tag';
 
 const SKILLS = ['All', 'React', 'Python', 'ML', 'Figma', 'Flutter'] as const;
 
@@ -25,15 +29,12 @@ export default function StudentsBrowser({ students }: { students: Student[] }) {
 
   return (
     <>
-      <section aria-label="Search and filters" className="card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <section aria-label="Search and filters" className="card student-filters">
         <div className="search-row">
-          <div className="field">
-            <label htmlFor="student-search" className="field__label">Search by name or skill</label>
-            <input id="student-search" type="search" className="input" placeholder="e.g. React, Python, Sneha" value={query} onChange={(e) => setQuery(e.target.value)} />
-          </div>
-          <button type="button" className="toggle-btn" aria-pressed={teamOnly} onClick={() => setTeamOnly((v) => !v)}>
+          <Input id="student-search" label="Search by name or skill" type="search" placeholder="e.g. React, Python, Sneha" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Button variant="outline" className="toggle-btn" aria-pressed={teamOnly} onClick={() => setTeamOnly((v) => !v)}>
             Looking for a team only
-          </button>
+          </Button>
         </div>
         <FilterPills label="Skill" options={SKILLS} value={skill} onChange={setSkill} />
       </section>
@@ -43,7 +44,7 @@ export default function StudentsBrowser({ students }: { students: Student[] }) {
       {results.length > 0 ? (
         <div className="student-grid">
           {results.map((s) => (
-            <article key={s.id} className="student-card">
+            <article key={s.id} className="student-card card">
               <div className="student-card__head">
                 <Avatar studentId={s.id} name={s.name} size="lg" />
                 <div style={{ minWidth: 0 }}>
@@ -56,11 +57,16 @@ export default function StudentsBrowser({ students }: { students: Student[] }) {
               </div>
               <div className="student-card__foot">
                 {s.lookingForTeam ? (
-                  <span className="chip" style={{ background: '#DDF5EA', color: '#11694A' }}>Looking for a team</span>
+                  <Tag className="chip">Looking for a team</Tag>
                 ) : (
                   <span className="muted-note">Not looking right now</span>
                 )}
-                <Link href={`/students/${s.id}`} className="btn btn--dark">View profile</Link>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginLeft: 'auto' }}>
+                  <ForkButton targetUserId={s.id} targetName={s.name} size="sm" />
+                  <Link href={`/students/${s.id}`} className="btn btn--dark" style={{ minHeight: 34, fontSize: 13, padding: '0 12px' }}>
+                    View profile
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

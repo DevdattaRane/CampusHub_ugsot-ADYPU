@@ -1,25 +1,29 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ProfileView from '@/components/ProfileView';
-import { CURRENT_USER_ID, getStudent, students } from '@/lib/data';
+import { getPublicStudentById } from '@/lib/db/dashboard';
+import { getCurrentUser } from '@/lib/auth';
 
-export function generateStaticParams() {
-  return students.map((s) => ({ id: s.id }));
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const s = await getPublicStudentById(id);
+  return { title: s ? `${s.name} · CampusHub · UGSOT` : 'Student not found · CampusHub · UGSOT' };
 }
 
-export function generateMetadata({ params }: { params: { id: string } }) {
-  const s = getStudent(params.id);
-  return { title: s ? `${s.name} · UGSOTADYPU Hub` : 'Student not found' };
-}
-
-export default function StudentProfilePage({ params }: { params: { id: string } }) {
-  const student = getStudent(params.id);
+export default async function StudentProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const student = await getPublicStudentById(id);
   if (!student) notFound();
+
+  const currentUser = await getCurrentUser();
+  const isOwn = currentUser ? currentUser.id === student.id : false;
 
   return (
     <main className="container page" style={{ gap: 12 }}>
       <Link href="/students" className="back-link">← All students</Link>
-      <ProfileView student={student} isOwn={student.id === CURRENT_USER_ID} />
+      <ProfileView key={student.id} student={student} isOwn={isOwn} />
     </main>
   );
 }
