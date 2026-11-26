@@ -17,12 +17,15 @@ export async function proxy(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
-        Object.entries(cacheHeaders).forEach(([name, value]) => response.headers.set(name, value));
+        if (cacheHeaders) {
+          Object.entries(cacheHeaders).forEach(([name, value]) => response.headers.set(name, value));
+        }
       },
     },
   });
 
-  await supabase.auth.getClaims();
+  // IMPORTANT: auth.getUser() contacts Supabase to validate and refresh expired sessions
+  await supabase.auth.getUser();
   return response;
 }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { AuthServiceError, signUp } from '@/lib/auth';
+import { AuthServiceError, signUp, getPublicOrigin } from '@/lib/auth';
 import { isStringRecord, validateSignUp } from '@/lib/validation';
 
 export async function POST(request: Request) {
@@ -16,7 +16,9 @@ export async function POST(request: Request) {
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 400 });
 
   try {
-    const result = await signUp(name, email, password, courseYear);
+    const origin = getPublicOrigin(request);
+    const emailRedirectTo = `${origin}/auth/callback?next=/onboarding`;
+    const result = await signUp(name, email, password, courseYear, emailRedirectTo);
     return NextResponse.json({ success: true, ...result });
   } catch (error) {
     if (error instanceof AuthServiceError) {

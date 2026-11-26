@@ -1,16 +1,19 @@
 import { NextResponse } from 'next/server';
-import { resendEmailConfirmation, AuthServiceError } from '@/lib/auth';
+import { resendEmailConfirmation, AuthServiceError, getPublicOrigin } from '@/lib/auth';
+import { isValidEmail } from '@/lib/validation';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null);
     const email = body?.email;
 
-    if (typeof email !== 'string' || !email.trim()) {
+    if (typeof email !== 'string' || !email.trim() || !isValidEmail(email)) {
       return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
     }
 
-    await resendEmailConfirmation(email);
+    const origin = getPublicOrigin(request);
+    const emailRedirectTo = `${origin}/auth/callback?next=/onboarding`;
+    await resendEmailConfirmation(email, emailRedirectTo);
     return NextResponse.json({ success: true });
   } catch (err) {
     if (err instanceof AuthServiceError) {

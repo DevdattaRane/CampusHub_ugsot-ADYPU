@@ -36,6 +36,24 @@ export function validateSignUp(values: SignUpValues): AuthErrors {
   return errors;
 }
 
+export type ResetPasswordValues = {
+  password: string;
+  confirmPassword?: string;
+};
+
+export function validateResetPassword(values: ResetPasswordValues): AuthErrors {
+  const errors: AuthErrors = {};
+  validatePassword(values.password, errors);
+  if (values.confirmPassword !== undefined && values.confirmPassword !== values.password) {
+    errors.confirmPassword = 'Passwords do not match.';
+  }
+  return errors;
+}
+
+export function isValidEmail(email: string): boolean {
+  return EMAIL_PATTERN.test(email.trim());
+}
+
 export function isStringRecord(value: unknown): value is Record<string, string> {
   return typeof value === 'object' && value !== null
     && Object.values(value).every((item) => typeof item === 'string');

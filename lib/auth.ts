@@ -1,28 +1,6 @@
 import { createSupabaseServerClient, isSupabaseConfigured } from '@/lib/supabase/server';
-
-export type CurrentUser = {
-  id: string;
-  name: string;
-  email: string;
-  role: 'student' | 'organizer';
-  githubUsername?: string | null;
-  skills?: string[];
-  bio?: string | null;
-  courseYear?: string | null;
-  interests?: string[];
-  goals?: string[];
-  onboardingCompleted?: boolean;
-  isProfilePrivate?: boolean;
-  isSuspended?: boolean;
-  warningCount?: number;
-};
-
-export class AuthServiceError extends Error {
-  constructor(message: string, readonly status: number) {
-    super(message);
-    this.name = 'AuthServiceError';
-  }
-}
+export * from './auth-helpers';
+import { AuthServiceError, type CurrentUser } from './auth-helpers';
 
 export async function signIn(email: string, password: string) {
   const supabase = await createSupabaseServerClient();
@@ -31,25 +9,38 @@ export async function signIn(email: string, password: string) {
     password,
   });
   if (error) {
+    if (/email not confirmed/i.test(error.message)) {
+      throw new AuthServiceError('Please verify your email address before signing in. Check your inbox for the confirmation link.', 400);
+    }
     throw new AuthServiceError('Email or password is incorrect. Please try again.', 400);
   }
 }
 
-export async function signUp(name: string, email: string, password: string, courseYear: string) {
+export async function signUp(
+  name: string,
+  email: string,
+  password: string,
+  courseYear: string,
+  emailRedirectTo?: string,
+) {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.signUp({
     email: email.trim().toLowerCase(),
     password,
     options: {
       data: { full_name: name.trim(), course_year: courseYear },
+      ...(emailRedirectTo ? { emailRedirectTo } : {}),
     },
   });
   if (error) {
     const alreadyRegistered = /already (?:been )?registered|already exists/i.test(error.message);
     throw new AuthServiceError(
-      alreadyRegistered ? 'An account with this email already exists. Try signing in.' : 'We couldn’t create your account. Check your details and try again.',
+      alreadyRegistered ? 'An account with this email already exists. Try signing in.' : (error.message || 'We couldn’t create your account. Check your details and try again.'),
       400,
     );
+  }
+  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    throw new AuthServiceError('An account with this email already exists. Try signing in.', 400);
   }
   return { confirmationRequired: data.session === null };
 }
@@ -79,11 +70,12 @@ export async function updatePassword(password: string) {
   }
 }
 
-export async function resendEmailConfirmation(email: string) {
+export async function resendEmailConfirmation(email: string, emailRedirectTo?: string) {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.resend({
     type: 'signup',
     email: email.trim().toLowerCase(),
+    options: emailRedirectTo ? { emailRedirectTo } : undefined,
   });
   if (error) {
     throw new AuthServiceError('Unable to resend confirmation email. Please check your email or wait a moment.', 400);
@@ -100,12 +92,39 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   }
   if (!authData.user?.email) return null;
 
-  const { data: profile, error } = await supabase
+  const { data: initialProfile, error } = await supabase
     .from('profiles')
     .select('full_name, role, github_username, skills, bio, course_year, interests, goals, onboarding_completed, is_profile_private, is_suspended, warning_count')
     .eq('id', authData.user.id)
     .maybeSingle();
-  if (error) {
+
+  let profile = initialProfile;
+
+  // Self-heal profile if trigger did not create it
+  if (!profile) {
+    const defaultName = authData.user.user_metadata?.full_name || '';
+    const defaultCourseYear = authData.user.user_metadata?.course_year || null;
+    try {
+      const { data: createdProfile, error: insertError } = await supabase
+        .from('profiles')
+        .insert({
+          id: authData.user.id,
+          email: authData.user.email.toLowerCase(),
+          full_name: defaultName,
+          course_year: defaultCourseYear,
+          role: 'student',
+        })
+        .select('full_name, role, github_username, skills, bio, course_year, interests, goals, onboarding_completed, is_profile_private, is_suspended, warning_count')
+        .maybeSingle();
+      if (!insertError && createdProfile) {
+        profile = createdProfile;
+      }
+    } catch {
+      // Ignore self-heal errors, fall back to user metadata below
+    }
+  }
+
+  if (error && !profile) {
     console.warn(`Unable to load the signed-in profile: ${error.message}`);
   }
 
