@@ -37,12 +37,12 @@ export default function ForgotPasswordForm() {
   return (
     <form className="auth-form" onSubmit={handleSubmit} style={{ gap: 16 }}>
       <div className="field">
-        <label className="field__label" htmlFor="reset-email">College email</label>
+        <label className="field__label" htmlFor="reset-email">Email address</label>
         <input
           id="reset-email"
           type="email"
           className="input"
-          placeholder="you@adypu.edu.in"
+          placeholder="you@example.com"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/auth-flows.test.ts",
     "build": "next build",
     "start": "next start"
   },

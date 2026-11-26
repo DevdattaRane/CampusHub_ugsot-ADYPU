@@ -1,13 +1,9 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { getCurrentUser } from '@/lib/auth';
 import LiquidLogo from '@/components/effects/LiquidLogo';
 import ShaderBackground from '@/components/effects/ShaderBackground';
 
-export default async function AuthLayout({ children }: { children: ReactNode }) {
-  if (await getCurrentUser()) redirect('/');
-
+export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <main className="auth-page">
       <div className="auth-layout">

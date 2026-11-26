@@ -50,7 +50,7 @@ function PasswordField({ id, label, value, autoComplete, error, onChange }: Pass
   );
 }
 
-export default function AuthForm({ mode }: { mode: Mode }) {
+export default function AuthForm({ mode, initialError }: { mode: Mode; initialError?: string }) {
   const router = useRouter();
   const [activeMode, setActiveMode] = useState(mode);
   const registering = activeMode === 'register';
@@ -58,7 +58,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
     name: '', email: '', password: '', confirmPassword: '', courseYear: '',
   });
   const [errors, setErrors] = useState<AuthErrors>({});
-  const [formError, setFormError] = useState('');
+  const [formError, setFormError] = useState(initialError || '');
   const [formMessage, setFormMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 

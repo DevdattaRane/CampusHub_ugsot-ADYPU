@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { AuthServiceError, requestPasswordReset } from '@/lib/auth';
-import { isStringRecord } from '@/lib/validation';
+import { AuthServiceError, requestPasswordReset, getPublicOrigin } from '@/lib/auth';
+import { isStringRecord, isValidEmail } from '@/lib/validation';
 
 export async function POST(request: Request) {
   const body: unknown = await request.json().catch(() => null);
@@ -9,12 +9,12 @@ export async function POST(request: Request) {
   }
 
   const email = body.email.trim();
-  if (!email) {
-    return NextResponse.json({ form: 'Enter your email address.' }, { status: 400 });
+  if (!email || !isValidEmail(email)) {
+    return NextResponse.json({ form: 'Enter a valid email address.' }, { status: 400 });
   }
 
   try {
-    const origin = new URL(request.url).origin;
+    const origin = getPublicOrigin(request);
     const redirectTo = `${origin}/auth/callback?next=/auth/reset-password`;
     await requestPasswordReset(email, redirectTo);
     return NextResponse.json({ success: true });

@@ -60,11 +60,15 @@ export async function POST(request: Request) {
       // Continue
     }
 
-    // Update profiles table
+    // Update or insert profiles table
     const { error } = await supabase
       .from('profiles')
-      .update(payload)
-      .eq('id', currentUser.id);
+      .upsert({
+        id: currentUser.id,
+        email: currentUser.email.toLowerCase(),
+        full_name: payload.full_name || currentUser.name || '',
+        ...payload,
+      }, { onConflict: 'id' });
 
     if (error) {
       console.warn(`Profile update warning in onboarding: ${error.message}`);
